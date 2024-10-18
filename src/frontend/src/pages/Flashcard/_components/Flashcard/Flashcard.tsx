@@ -27,7 +27,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
           flipCard
             ? "font-black bg-zinc-900 text-white"
             : "font-sans bg-secondary text-secondary-foreground opacity-95"
-        } h-full flex items-center justify-center px-14 py-2.5 sm:shadow border sm:w-[33rem] rounded-xl`}
+        } h-full flex items-center justify-center px-14 py-2.5 sm:shadow border w-full sm:w-[33rem] rounded-xl`}
         onClick={() => setFlipCard(!flipCard)}
       >
         <motion.div

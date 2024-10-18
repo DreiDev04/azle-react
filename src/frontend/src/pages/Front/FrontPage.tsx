@@ -1,34 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Link, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Zap, BookOpen, SmilePlus, PenTool, Scroll } from "lucide-react";
 
-const icons = [
-  {
-    icon: "https://cdn-icons-png.flaticon.com/128/17389/17389629.png",
-    name: "Real-Time Collaboration",
-    description:
-      "Work together with your group in real-time to ensure everyone is on the same page.",
-  },
-  {
-    icon: "https://cdn-icons-png.flaticon.com/128/3790/3790039.png",
-    name: "Role-Based Access",
-    description:
-      "Assign roles and permissions to manage your events effectively.",
-  },
-  {
-    icon: "https://cdn-icons-png.flaticon.com/128/2139/2139551.png",
-    name: "Seamless Event Management",
-    description:
-      "Keep track of everything with intuitive event management tools.",
-  },
-];
 const FrontPage = () => {
   // TODO: Replace with actual value
   let isSignedIn = false;
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen ">
       <nav className="w-full py-4 flex gap-4 items-center px-8 bg-card">
-        <div className="text-xl font-bold text-card-foreground">TokCards</div>
+        <div className="text-xl font-bold text-card-foreground">ScrollUp</div>
         <div className="space-x-4">
           {isSignedIn ? (
             <>
@@ -67,74 +58,125 @@ const FrontPage = () => {
         </div>
       </nav>
 
-      <header className="flex-grow flex flex-col justify-center items-center text-center p-8 mb-10">
+      <section className="py-20 px-4">
+        <div className=" mx-auto max-w-6xl">
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 mb-10 md:mb-0">
+              <h1 className="text-4xl md:text-6xl font-black leading-none">
+                Reinvent the Cycle. Scroll with Purpose.
+              </h1>
+              <p className="text-xl my-4 text-secondary-foreground leading-none">
+                Scroll smart with ScrollUp.
+              </p>
+              <div className="flex space-x-4">
+                <div className="flex space-x-4">
+                  {isSignedIn ? (
+                    <Button
+                      variant={"default"}
+                      asChild
+                    >
+                      <Link to="/class">Go to Dashboard</Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant={"default"}
+                      asChild
+                    >
+                      <Link to="/signup">Get Started</Link>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="md:w-1/2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gray-200 rounded-xl transform rotate-3"></div>
+                <img
+                  src="https://placehold.co/600x400"
+                  alt="ScrollUp App"
+                  className="relative rounded-xl shadow-2xl"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="flex-grow flex flex-col justify-center items-center text-center p-8 mb-10">
         <br />
         <br />
         <h1 className="text-5xl font-bold mb-4">
-          Lorem ipsum dolor, sit amet consectetur 
+          No More Doomscrolling—It’s Time for Smart Scrolling!
         </h1>
-        <p className="text-lg mb-8 max-w-2xl">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate placeat deserunt et at ipsa assumenda optio enim dignissimos quam dolorem consectetur harum, asperiores quis fugiat praesentium labore deleniti alias delectus.
+        <p className="text-lg mb-6 max-w-3xl">
+          We’ve all been trapped in doom scrolling. ScrollSmart helps you break
+          free, curating meaningful content that inspires, educates, and
+          empowers you every time you scroll.
         </p>
-        <div className="flex space-x-4">
-          {isSignedIn ? (
-            <Button
-              variant={"default"}
-              asChild
-            >
-              <Link to="/class">Go to Dashboard</Link>
-            </Button>
-          ) : (
-            <Button
-              variant={"default"}
-              asChild
-            >
-              <Link to="/signup">Get Started</Link>
-            </Button>
-          )}
-        </div>
+      </section>
 
-        {/* //TODO: Add Image */}
-        {/* <Image
-        src={"/samples/preview.png"}
-        width={1000}
-        height={1000}
-        alt="Demo Image"
-        className="shadow-lg rounded-md border my-14"
-      /> */}
-      </header>
-
-      <section className="bg-accent py-10 px-8 flex flex-col">
-        <div className="flex  justify-center mb-10">
-          <h1 className="text-5xl font-bold">Features</h1>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {icons.map((icon) => (
-            <div
-              key={icon.name}
-              className="flex flex-col items-center"
-            >
-              <div>
-                <img
-                  src={icon.icon}
-                  alt={icon.name}
-                  width={64}
-                  height={64}
-                />
+      <section
+        id="features"
+        className="py-12 px-4 bg-accent"
+      >
+        <div className="mx-auto lg:mx-40">
+          <h2 className="text-4xl text-center md:text-6xl font-black leading-none mb-6">
+            Main Features
+          </h2>
+          <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
+            {[
+                {
+                  icon: <BookOpen className="h-10 w-10" />,
+                  title: "Interactive Classes",
+                  description: "Join classes filled with engaging decks of flashcards tailored to your subjects.",
+                },
+                // {
+                //   icon: <PenTool className="h-10 w-10" />,
+                //   title: "Create Your Own Flashcards",
+                //   description: "Easily create and customize flashcards to enhance your learning experience.",
+                // },
+                {
+                  icon: <SmilePlus className="h-10 w-10" />
+                  ,
+                  title: "Difficulty Feedback",
+                  description: "Rate flashcards based on difficulty to personalize your learning journey.",
+                },
+                {
+                  icon: <Scroll className="h-10 w-10" />,
+                  title: "Scroll to Learn",
+                  description: "Practice your flashcards in an engaging way by scrolling through your decks.",
+                },
+                {
+                  icon: <Zap className="h-10 w-10" />,
+                  title: "Positive Impact",
+                  description: "Turn your scrolling habit into a source of growth and inspiration.",
+                },
+              ].map((feature, index) => (
+              <div
+                key={index}
+                className="bg-card border-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <div className="mb-4 text-card-foreground">{feature.icon}</div>
+                <h3 className="text-xl font-semibold mb-2 text-card-foreground">
+                  {feature.title}
+                </h3>
+                <p className="text-card-foreground">{feature.description}</p>
               </div>
-              <h2 className="text-xl font-bold mt-4">{icon.name}</h2>
-              <p className="text-center">{icon.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       <footer className="bg-card text-card-foreground text-center py-12">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-lg mb-8">
+          <h2 className="text-3xl mb-4 max-w-3xl mx-auto">
+            <span className="font-bold">Doom scrolling</span> wastes time,
+            drains mental energy, and leaves us feeling overwhelmed.{" "}
+            <span className="font-bold">It’s time for a change.</span>
+          </h2>
+          {/* <p className="text-lg mb-8">
             Join us today and never miss an event again.
-          </p>
+          </p> */}
           {/* //TODO: Redundant kaya isip ka ng iba heehhehe */}
           {isSignedIn ? (
             <Button
@@ -153,7 +195,7 @@ const FrontPage = () => {
           )}
           <div className="mt-12">
             <p className="text-gray-400">
-              &copy; {new Date().getFullYear()} Event++. All rights reserved.
+              &copy; {new Date().getFullYear()} ScrollUp. All rights reserved.
             </p>
           </div>
         </div>
