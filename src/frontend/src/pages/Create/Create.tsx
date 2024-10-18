@@ -30,8 +30,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { toast } from "@/hooks/use-toast";
-import { PlusCircle, Trash2 } from "lucide-react";
-import { create } from "zustand";
+import { PlusCircle, Save, Trash2 } from "lucide-react";
 
 const flashcardSchema = z.object({
   question: z.string().min(1, "Question is required"),
@@ -77,14 +76,13 @@ export default function MultipleFlashcardCreator() {
       ...flashcard,
       date: currentDate,
     }));
-    setCreatedFlashcards((prev) => [...prev, ...newFlashcards]);
+    setCreatedFlashcards(newFlashcards);
     toast({
       title: "Flashcards created",
       description: `${newFlashcards.length} flashcard(s) have been successfully created.`,
     });
     // Here you would typically save the flashcards to your database or state management
     console.log(newFlashcards);
-    form.reset({ flashcards: [{ question: "", answer: "", hint: "" }] });
   }
 
   const [resizableDirection, setDirection] = useState<
@@ -254,19 +252,25 @@ export default function MultipleFlashcardCreator() {
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <h3 className="font-semibold">Question:</h3>
-                        <p>{flashcard.question}</p>
+                      <div className="text-sm">
+                        <p>Question:</p>
+                        <p className="border-b-2 border-spacing-1">
+                          {flashcard.question}
+                        </p>
                       </div>
-                      <div>
-                        <h3 className="font-semibold">Answer:</h3>
-                        <p>{flashcard.answer}</p>
+                      <div className="text-sm">
+                        <p>Answer:</p>
+                        <p className="border-b-2 border-spacing-1">
+                          {flashcard.answer}
+                        </p>
                       </div>
                     </div>
                     {flashcard.hint && (
-                      <div className="mt-4">
-                        <h3 className="font-semibold">Hint:</h3>
-                        <p>{flashcard.hint}</p>
+                      <div className="mt-2">
+                        <p className="text-sm">Hint:</p>
+                        <p className="border-b-2 border-spacing-1">
+                          {flashcard.hint}
+                        </p>
                       </div>
                     )}
                   </CardContent>
@@ -274,6 +278,12 @@ export default function MultipleFlashcardCreator() {
               ))}
             </div>
           </CardContent>
+          {/* <CardFooter>
+            <Button>
+              <Save className="w-4 h-4 mr-2" />
+              Save Flashcards
+            </Button>
+          </CardFooter> */}
         </Card>
       </ResizablePanel>
     </ResizablePanelGroup>
