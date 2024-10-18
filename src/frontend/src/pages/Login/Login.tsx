@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -30,6 +30,9 @@ const formSchema = z.object({
 });
 
 function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,12 +41,13 @@ function Login() {
     },
   });
 
-  const { login } = useAuth();
+  
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await login(values.email, values.password); // Call the login function
+      navigate("/");
       // Optionally redirect or handle success
     } catch (err) {
       setError((err as Error).message); // Set the error message on failure
