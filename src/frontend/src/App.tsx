@@ -14,7 +14,9 @@ import { Navigation } from "./Navigation";
 import Flashcard from "./pages/Flashcard/Flashcards";
 import Profile from "./pages/Profile/Profile";
 import Classes from "./pages/Classes/Classes";
+import { AuthProvider } from '@/context/AuthContext';
 import EditDeck from "./pages/EditDeck/EditDeck";
+
 
 function App() {
   const router = createBrowserRouter(
@@ -88,7 +90,7 @@ function App() {
     )
   );
 
-  return <RouterProvider router={router} />;
+  return <AuthProvider><RouterProvider router={router} /></AuthProvider>;
 }
 
 export default App;
