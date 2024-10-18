@@ -43,9 +43,7 @@ export default class ClassController {
             classEntity.class_owner = class_owner;
             classEntity.class_members = class_members;
 
-            console.log("out");
             await classEntity.save();
-            console.log("in");
             return response.status(200).json({ message: "Class created!", payload: classEntity});
         } catch (error) {
             return response.status(400).json({ message: "Error in creating class: ", error: error })
