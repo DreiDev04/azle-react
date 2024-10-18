@@ -124,7 +124,7 @@ export default class DeckController {
     };
 
     static async user_decks(req: Request, res: Response){
-        const user_id = parseInt(req.params.id);
+        const user_id = parseInt(req.params.user_id);
 
         try {
             const user_decks = await Deck.find({
@@ -137,7 +137,7 @@ export default class DeckController {
     }
 
     static async class_decks(req: Request, res: Response){
-        const class_id = parseInt(req.params.id);
+        const class_id = parseInt(req.params.class_id);
 
         try {
             const user_decks = await Deck.find({
