@@ -46,9 +46,13 @@ function Signup() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_username: username, user_email: email, user_password: password }),
+      body: JSON.stringify({
+        user_username: username,
+        user_email: email,
+        user_password: password,
+      }),
     });
-    
+
     const data = await response.json();
     // TODO: put the signup auth
     console.log("Data:", data);

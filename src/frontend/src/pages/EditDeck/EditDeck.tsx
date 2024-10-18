@@ -1,3 +1,4 @@
+// import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,7 +29,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { toast } from "@/hooks/use-toast";
-import { PlusCircle, Save, Trash2 } from "lucide-react";
+import { PlusCircle, Trash2 } from "lucide-react";
 
 const flashcardSchema = z.object({
   question: z.string().min(1, "Question is required"),
@@ -42,16 +43,78 @@ const formSchema = z.object({
     .min(1, "At least one flashcard is required"),
 });
 
-type FlashcardType = z.infer<typeof flashcardSchema> & { date: string };
+const cards = [
+  {
+    question: "What is React?",
+    answer: "A library for managing user interfaces",
+    recalledForCount: 1,
+    id: 1,
+    hint: "A ______ for managing ______",
+    deckId: 1,
+    createdAt: "2023-10-01T00:00:00Z",
+  },
+  {
+    question: "Where do you make Ajax requests in React?",
+    answer: "The componentDidMount lifecycle event",
+    recalledForCount: 0,
+    id: 2,
+    hint: "The ______ event",
+    deckId: 1,
+    createdAt: "2023-10-01T00:00:00Z",
+  },
+  {
+    question: "What is JSX?",
+    answer: "A syntax extension for JavaScript",
+    recalledForCount: 4,
+    id: 3,
+    hint: "A ______ JavaScript",
+    deckId: 1,
+    createdAt: "2023-10-01T00:00:00Z",
+  },
+  {
+    question: "What is a component in React?",
+    answer: "A reusable piece of UI",
+    recalledForCount: 1,
+    id: 4,
+    hint: "A ______ UI",
+    deckId: 1,
+    createdAt: "2023-10-01T00:00:00Z",
+  },
+  {
+    question: "What is state in React?",
+    answer: "An object that determines how that component renders & behaves",
+    recalledForCount: 0,
+    id: 5,
+    hint: "No hint available",
+    deckId: 1,
+    createdAt: "2023-10-01T00:00:00Z",
+  },
+  {
+    question: "What are props in React?",
+    answer:
+      "Inputs to a React component that allow data to be passed from one component to another",
+    recalledForCount: 0,
+    id: 6,
+    hint: "No hint available",
+    deckId: 1,
+    createdAt: "2023-10-01T00:00:00Z",
+  },
+];
 
-export default function Create() {
-  const [createdFlashcards, setCreatedFlashcards] = useState<FlashcardType[]>(
-    []
-  );
+type FlashcardType = z.infer<typeof flashcardSchema> & { createdAt: string };
+
+function EditDeck() {
+  // const { id } = useParams<{ id: string }>();
+
+  const [flashcards, setFlashcards] = useState<FlashcardType[]>(cards);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      flashcards: [{ question: "", answer: "", hint: "" }],
+      flashcards: cards.map(({ question, answer, hint }) => ({
+        question,
+        answer,
+        hint,
+      })),
     },
   });
 
@@ -72,9 +135,9 @@ export default function Create() {
     const currentDate = formatDate(new Date());
     const newFlashcards = values.flashcards.map((flashcard) => ({
       ...flashcard,
-      date: currentDate,
+      createdAt: currentDate,
     }));
-    setCreatedFlashcards(newFlashcards);
+    setFlashcards(newFlashcards);
     toast({
       title: "Flashcards created",
       description: `${newFlashcards.length} flashcard(s) have been successfully created.`,
@@ -109,8 +172,9 @@ export default function Create() {
       <ResizablePanel>
         <Card>
           <CardHeader>
-            <CardTitle>Create Tokki Cards</CardTitle>
+            <CardTitle>Edit [Deck Name]</CardTitle>
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
               <form
@@ -204,7 +268,11 @@ export default function Create() {
                     </CardFooter>
                   </Card>
                 ))}
-                <div className="z-50 sticky bottom-4 flex justify-end pr-5 gap-4">
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+        <div className="z-50 sticky bottom-4 flex justify-end pr-5 gap-4">
           <Button
             type="button"
             size="sm"
@@ -220,24 +288,21 @@ export default function Create() {
             Save Flashcards
           </Button>
         </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
       </ResizablePanel>
+
       <ResizableHandle withHandle />
 
-      <ResizablePanel defaultSize={25}>
+      <ResizablePanel defaultSize={40}>
         <Card className="w-full mx-auto">
           <CardHeader className="flex flex-col gap-0 items-start">
-            <CardTitle>Flashcards ( {createdFlashcards.length} )</CardTitle>
+            <CardTitle>Flashcards ( {flashcards.length} )</CardTitle>
             <p className="text-[.8rem] text-gray-500">
               Created on: {new Date().toLocaleDateString()}
             </p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {createdFlashcards.map((flashcard, index) => (
+              {flashcards.map((flashcard, index) => (
                 <Card
                   key={index}
                   className="p-4"
@@ -247,7 +312,7 @@ export default function Create() {
                       Flashcard {index + 1}
                     </CardTitle>
                     <CardDescription>
-                      Created on: {flashcard.date}
+                      {formatDate(new Date(flashcard.createdAt))}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-0">
@@ -289,3 +354,5 @@ export default function Create() {
     </ResizablePanelGroup>
   );
 }
+
+export default EditDeck;

@@ -15,20 +15,77 @@ import Flashcard from "./pages/Flashcard/Flashcards";
 import Profile from "./pages/Profile/Profile";
 import Classes from "./pages/Classes/Classes";
 import { AuthProvider } from '@/context/AuthContext';
+import EditDeck from "./pages/EditDeck/EditDeck";
 
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Root />}>
-        <Route index element={<FrontPage />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="class" element={<Navigation><Classes /></Navigation>} />
-        <Route path="create" element={<Navigation><Create /></Navigation>} />
-        <Route path="deck" element={<Navigation><Deck /></Navigation>} />
-        <Route path="flashcards" element={<Navigation><Flashcard /></Navigation>} />
-        <Route path="profile" element={<Navigation><Profile /></Navigation>} />
+      <Route
+        path="/"
+        element={<Root />}
+      >
+        <Route
+          index
+          element={<FrontPage />}
+        />
+        <Route
+          path="login"
+          element={<Login />}
+        />
+        <Route
+          path="signup"
+          element={<Signup />}
+        />
+        <Route
+          path="class"
+          element={
+            <Navigation>
+              <Classes />
+            </Navigation>
+          }
+        />
+        <Route
+          path="create"
+          element={
+            <Navigation>
+              <Create />
+            </Navigation>
+          }
+        />
+        <Route
+          path="deck"
+          element={
+            <Navigation>
+              <Deck />
+            </Navigation>
+          }
+        />
+        {/* //TODO: add /:id */}
+        <Route
+          path="deck/edit"
+          element={
+            <Navigation>
+              <EditDeck />
+            </Navigation>
+          }
+        />
+        <Route
+          path="flashcards"
+          element={
+            <Navigation>
+              <Flashcard />
+            </Navigation>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <Navigation>
+              <Profile />
+            </Navigation>
+          }
+        />
       </Route>
     )
   );

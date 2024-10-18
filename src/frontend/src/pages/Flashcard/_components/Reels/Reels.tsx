@@ -40,7 +40,7 @@ function Reels({ cards, redoCards }: ReelsProps) {
             className={`${styles["last-card"]} ${styles["empty-cards"]} flex flex-col`}
           >
             <p className="text-base ">There are no cards to display.</p>
-            <Button className="mt-5 bg-background text-foregrount font-black text-base lg:text-lg hover:brightness-200 active:scale-90 ease-in-out duration-150">
+            <Button className="mt-5 bg-background text-foreground font-black text-base lg:text-lg hover:brightness-200 active:scale-90 ease-in-out duration-150">
               Create cards
             </Button>
           </div>
