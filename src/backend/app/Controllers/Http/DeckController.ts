@@ -114,7 +114,7 @@ export default class DeckController {
     };
 
     // Get all Decks
-    static decks = async (req: Request, res: Response) => {
+    static async decks(req: Request, res: Response) {
         try {
             const decks = await Deck.find();
             return res.status(200).json(decks);
@@ -122,5 +122,31 @@ export default class DeckController {
             return res.status(500).json({ message: "Error fetching decks", error });
         }
     };
+
+    static async user_decks(req: Request, res: Response){
+        const user_id = parseInt(req.params.user_id);
+
+        try {
+            const user_decks = await Deck.find({
+                where: {user: {user_id: user_id}},
+            });
+            return res.status(200).json({ message: "Success in fetching decks", data: user_decks });
+        } catch (error) {
+            return res.status(400).json({ message: "Error fetching decks", error });
+        }
+    }
+
+    static async class_decks(req: Request, res: Response){
+        const class_id = parseInt(req.params.class_id);
+
+        try {
+            const user_decks = await Deck.find({
+                where: {classEntities: {class_id: class_id}},
+            });
+            return res.status(200).json({ message: "Success in fetching decks", data: user_decks });
+        } catch (error) {
+            return res.status(400).json({ message: "Error fetching decks", error });
+        }
+    }
 }
 

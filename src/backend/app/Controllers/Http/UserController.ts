@@ -4,30 +4,28 @@ import { Response, Request } from "express";
 
 export default class UserController {
   static async users(request: Request, response: Response) {
-    const users = await User.find(); // Returns all users
-
-    response.json({
-      status: 200,
-      data: users,
-    });
+    try {
+      const users = await User.find();
+      return response
+        .status(200)
+        .json({ message: "Getting users success.", data: users});
+    } catch (error) {
+      return response
+        .status(400)
+        .json({ message: "Error in getting users", error});
+    }
   }
 
   static async get_user(request: Request, response: Response) {
     const { user_id } = request.body;
     try {
-      const user = await User.findBy({ user_id }); // Returns an array
-
-      if (!user.length) { // Ensure the array is not empty
-        return response.status(404).json({
-          status: 404,
-          message: "User not found!",
-        });
+      const user = await User.findOneBy({ user_id });
+      if (!user) {
+        throw new Error("User not found!");
       }
-
-      response.json({
-        status: 200,
-        data: user[0],
-      });
+      return response
+        .status(200)
+        .json({message: "Success in getting the user", data: user});
     } catch (error) {
       return response
         .status(500)
@@ -39,13 +37,13 @@ export default class UserController {
     let { user_username, user_email, user_password } = request.body;
 
     try {
-      const checkIfExist = await User.findOneBy({ user_username });
-
-      if (checkIfExist) {
-        return response.status(400).json({
-          status: 400,
-          message: "Username already exists!",
-        });
+      const sameUsername = await User.findOneBy({ user_username });
+      if (sameUsername) {
+        throw new Error("Username already exists!");
+      }
+      const sameEmail = await User.findOneBy({ user_email });
+      if (sameEmail) {
+        throw new Error("Email already exists!");
       }
 
       const user = new User();
@@ -63,10 +61,12 @@ export default class UserController {
       user.classes = [];
 
       await User.insert(user);
-      return response.status(201).json({ message: "User has been created!" });
+      return response
+        .status(201)
+        .json({ message: "User has been created!" });
     } catch (error) {
       return response
-        .status(500)
+        .status(400)
         .json({ message: "Error in creating the user.", error });
     }
   }
@@ -78,25 +78,29 @@ export default class UserController {
       const user = await User.findOneBy({ user_id });
 
       if (!user) {
-        return response.status(404).json({
-          status: 404,
-          message: "User not found!",
-        });
+        throw new Error("User not found!");
       }
-
-    user_password = generatePasswordHash(user_password).hash;
-
-      await User.update(
-        { user_id },
-        { user_username, user_email, user_password }
-      );
+      if (user_password){
+        const password = generatePasswordHash(user_password)
+        user_password = password.hash;
+        const user_salt = password.salt;
+        await User.update(
+          { user_id },
+          { user_username, user_email, user_password, user_salt }
+        );
+      } else {
+        await User.update(
+          { user_id },
+          { user_username, user_email}
+        );
+      }
+      
       return response.status(200).json({
-        status: 200,
         message: "User has been updated!",
       });
     } catch (error) {
       return response
-        .status(500)
+        .status(400)
         .json({ message: "Error in updating the user.", error });
     }
   }
@@ -108,21 +112,17 @@ export default class UserController {
       const user = await User.findOneBy({ user_id });
 
       if (!user) {
-        return response.status(404).json({
-          status: 404,
-          message: "User not found!",
-        });
+        throw new Error("User not found!");
       }
 
       await User.delete({ user_id });
 
       return response.status(200).json({
-        status: 200,
-        message: "User has been deleted!",
+        message: "User has been deleted!"
       });
     } catch (error) {
       return response
-        .status(500)
+        .status(400)
         .json({ message: "Error in deleting the user.", error });
     }
   }
