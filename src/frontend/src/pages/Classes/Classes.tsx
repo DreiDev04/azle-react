@@ -14,17 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   BookOpen,
@@ -37,9 +26,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import DialogEditDeck from "./_components/DialogEditDeck";
+import DialogDeleteDeck from "./_components/DialogDeleteDeck";
 
-interface ClassData {
-  id: string;
+interface Classes {
+  id: number;
   name: string;
   icon?: string;
   deckCount: number;
@@ -49,60 +40,52 @@ interface ClassData {
   isLiked: boolean;
 }
 
-export default function TwitterStyleClassLayout() {
-  const [classes, setClasses] = useState<ClassData[]>([]);
+const sampleClasses: Classes[] = [
+  {
+    id: 1,
+    name: "Mathematics",
+    icon: "M",
+    deckCount: 5,
+    description: "Algebra, Geometry, and Calculus flashcards",
+    createdAt: "2023-05-15T10:30:00Z",
+    likes: 15,
+    isLiked: false,
+  },
+  {
+    id: 2,
+    name: "History",
+    icon: "H",
+    deckCount: 3,
+    description: "World History and American History flashcards",
+    createdAt: "2023-06-01T14:45:00Z",
+    likes: 8,
+    isLiked: true,
+  },
+
+  // Add more sample classes as needed
+];
+
+export default function Classes() {
+  const [classes, setClasses] = useState<Classes[]>(sampleClasses);
   const [isGridLayout, setIsGridLayout] = useState(false);
 
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        // TODO: Replace '1' with the actual user ID
-        const userId = '1';
-        const urlWithParams = `${import.meta.env.VITE_CANISTER_URL}/app/${userId}/classes`;
-
-        const response = await fetch(urlWithParams, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setClasses(data.payload);
-        console.log('Data:', data);
-      } catch (error) {
-        console.error('Failed to fetch classes:', error);
-      }
-    };
-
-    fetchClasses();
-    console.log('Classes:', classes);
-  }, []);
-
-  const handleDelete = (id: string) => {
-    // TODO: Implement delete class with backend
-    // setClasses(classes.filter((c) => c.id !== id));
+  const handleDelete = (id: number) => {
+    setClasses(classes.filter((c) => c.id !== id));
   };
 
-  const handleLike = (id: string) => {
-    // TODO: Implement like class with backend
-    // setClasses(
-    //   classes.map((c) => {
-    //     if (c.id === id) {
-    //       return {
-    //         ...c,
-    //         likes: c.isLiked ? c.likes - 1 : c.likes + 1,
-    //         isLiked: !c.isLiked,
-    //       };
-    //     }
-    //     return c;
-    //   })
-    // );
+  const handleLike = (id: number) => {
+    setClasses(
+      classes.map((c) => {
+        if (c.id === id) {
+          return {
+            ...c,
+            likes: c.isLiked ? c.likes - 1 : c.likes + 1,
+            isLiked: !c.isLiked,
+          };
+        }
+        return c;
+      })
+    );
   };
 
   // TODO: should be moved to a utility file
@@ -157,40 +140,23 @@ export default function TwitterStyleClassLayout() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <DropdownMenuItem
-                            onSelect={(e) => e.preventDefault()}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently delete the class and all its
-                              associated decks and flashcards.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(classItem.id)}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <DialogEditDeck
+                        name={classItem.name}
+                        description={classItem.description}
+                      >
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Pencil className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                      </DialogEditDeck>
+                      <DialogDeleteDeck
+                        handleDelete={() => handleDelete(classItem.id)}
+                      >
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DialogDeleteDeck>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
