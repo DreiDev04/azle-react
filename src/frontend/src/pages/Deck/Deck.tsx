@@ -98,14 +98,15 @@ export default function FlashcardDecks() {
                 <p className="text-sm text-gray-500">{deck.description}</p>
               </CardContent>
               <CardFooter className="flex justify-between mt-auto">
-                <Button
-                  variant="outline"
-                  size="sm"
-                >
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit
-                </Button>
-
+                <Link to={`edit`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                </Link>
                 <Link to="/flashcards">
                   <Button
                     className="font-bold"
