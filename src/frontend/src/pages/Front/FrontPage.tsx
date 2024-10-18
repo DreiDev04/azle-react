@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 
 const icons = [
@@ -23,14 +24,16 @@ const icons = [
 ];
 const FrontPage = () => {
   // TODO: Replace with actual value
-  let isSignedIn = false;
+
+  const { isAuthenticated } = useAuth(); 
+
 
   return (
     <div className="min-h-screen ">
       <nav className="w-full py-4 flex gap-4 items-center px-8 bg-card">
         <div className="text-xl font-bold text-card-foreground">TokCards</div>
         <div className="space-x-4">
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <>
               <Button
                 variant={"default"}
@@ -71,13 +74,13 @@ const FrontPage = () => {
         <br />
         <br />
         <h1 className="text-5xl font-bold mb-4">
-          Lorem ipsum dolor, sit amet consectetur 
+          Lorem ipsum dolor, sit amet consectetur
         </h1>
         <p className="text-lg mb-8 max-w-2xl">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate placeat deserunt et at ipsa assumenda optio enim dignissimos quam dolorem consectetur harum, asperiores quis fugiat praesentium labore deleniti alias delectus.
         </p>
         <div className="flex space-x-4">
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <Button
               variant={"default"}
               asChild
@@ -136,7 +139,7 @@ const FrontPage = () => {
             Join us today and never miss an event again.
           </p>
           {/* //TODO: Redundant kaya isip ka ng iba heehhehe */}
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <Button
               variant={"default"}
               asChild

@@ -117,7 +117,7 @@ export default function Classes() {
       <div
         className={`grid gap-4 ${isGridLayout ? "md:grid-cols-2" : "grid-cols-1"}`}
       >
-        {classes.map((classItem) => (
+        {/* {classes.map((classItem) => (
           <Card
             key={classItem.id}
             className="overflow-hidden border-b border-border hover:bg-accent transition-colors"
@@ -196,7 +196,7 @@ export default function Classes() {
               </CardFooter>
             </Card>
           ))
-        }
+        } */}
       </div>
     </div>
   );
