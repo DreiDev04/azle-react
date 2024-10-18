@@ -50,42 +50,6 @@ const decks = [
     cardCount: 15,
     description: "Frequently used Git commands",
   },
-  {
-    id: 1,
-    title: "JavaScript Basics",
-    cardCount: 30,
-    description: "Fundamental concepts of JavaScript",
-  },
-  {
-    id: 2,
-    title: "React Hooks",
-    cardCount: 25,
-    description: "Understanding and using React Hooks",
-  },
-  {
-    id: 3,
-    title: "CSS Flexbox",
-    cardCount: 20,
-    description: "Mastering CSS Flexbox layout",
-  },
-  {
-    id: 4,
-    title: "Python Data Structures",
-    cardCount: 35,
-    description: "Common data structures in Python",
-  },
-  {
-    id: 5,
-    title: "SQL Queries",
-    cardCount: 40,
-    description: "Essential SQL queries for database management",
-  },
-  {
-    id: 6,
-    title: "Git Commands",
-    cardCount: 15,
-    description: "Frequently used Git commands",
-  },
 ];
 
 export default function FlashcardDecks() {
@@ -134,14 +98,15 @@ export default function FlashcardDecks() {
                 <p className="text-sm text-gray-500">{deck.description}</p>
               </CardContent>
               <CardFooter className="flex justify-between mt-auto">
-                <Button
-                  variant="outline"
-                  size="sm"
-                >
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit
-                </Button>
-
+                <Link to={`edit`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                </Link>
                 <Link to="/flashcards">
                   <Button
                     className="font-bold"
