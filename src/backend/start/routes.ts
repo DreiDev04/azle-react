@@ -3,6 +3,7 @@ import UserController from 'App/Controllers/Http/UserController';
 import DeckController from 'App/Controllers/Http/DeckController';
 import ClassController from 'App/Controllers/Http/ClassController';
 import { Router } from 'express';
+import AuthController from 'App/Controllers/Http/AuthController';
 const Route = Router();
 
 /*
@@ -46,5 +47,12 @@ Route.get('/app/get_class/:class_id', ClassController.get_class);
 Route.post('/app/create_class', ClassController.create_class);
 Route.post('/app/update_class/:class_id', ClassController.update_class);
 Route.post('/app/delete_class/:class_id', ClassController.delete_class);
+
+// /* Authentication */
+// Route.post("/app/auth/login", passport.authenticate("local"), (request, response) => {
+//     response.sendStatus(200);
+// });
+// Route.post("/app/auth/logout", AuthController.logout);
+// Route.get("/app/auth/status", AuthController.status);
 
 export { Route as routes };
