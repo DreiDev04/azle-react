@@ -36,6 +36,8 @@ Route.post('/app/delete_card', CardController.delete_card);
 
 /* Deck */
 Route.get('/app/decks', DeckController.decks);
+Route.get('/app/user_decks/:user_id', DeckController.user_decks);
+Route.get('/app/class_decks/:class_id', DeckController.class_decks);
 Route.get('/app/get_deck/:id', DeckController.get_deck);
 Route.post('/app/create_deck', DeckController.create_deck);
 Route.post('/app/update_deck/:id', DeckController.update_deck);

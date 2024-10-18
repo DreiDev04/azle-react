@@ -1,6 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { Link, Outlet } from 'react-router-dom'
-
+import { Button } from "@/components/ui/button";
+import { Link, Outlet } from "react-router-dom";
 
 const icons = [
   {
@@ -23,33 +22,48 @@ const icons = [
   },
 ];
 const FrontPage = () => {
-
   // TODO: Replace with actual value
   let isSignedIn = false;
 
-
   return (
     <div className="min-h-screen ">
-      <nav className="w-full py-4 flex justify-between items-center px-8 bg-card">
-        <div className="text-xl font-bold text-card-foreground">Event++</div>
+      <nav className="w-full py-4 flex gap-4 items-center px-8 bg-card">
+        <div className="text-xl font-bold text-card-foreground">TokCards</div>
         <div className="space-x-4">
           {isSignedIn ? (
             <>
-              <Button variant={"default"} asChild>
-                <Link to="/home">Home</Link>
+              <Button
+                variant={"default"}
+                asChild
+              >
+                <Link to="/class">Home</Link>
               </Button>
             </>
           ) : (
             <>
-              <Button variant={"outline"} asChild>
+              <Button
+                variant={"outline"}
+                asChild
+              >
                 <Link to="/signup">Sign Up</Link>
               </Button>
-              <Button variant={"default"} asChild>
+              <Button
+                variant={"default"}
+                asChild
+              >
                 <Link to="/login">Login</Link>
+              </Button>
+
+              {/* Dummy for testing */}
+              {/* Delete AFTER */}
+              <Button
+                variant={"default"}
+                asChild
+              >
+                <Link to="/class">Class</Link>
               </Button>
             </>
           )}
-
         </div>
       </nav>
 
@@ -57,27 +71,29 @@ const FrontPage = () => {
         <br />
         <br />
         <h1 className="text-5xl font-bold mb-4">
-          One Tool for Managing All Your Events
+          Lorem ipsum dolor, sit amet consectetur 
         </h1>
         <p className="text-lg mb-8 max-w-2xl">
-          Event++ enables you to effortlessly organize and manage your college
-          events with role-based access control, ensuring everyone stays on
-          track.
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate placeat deserunt et at ipsa assumenda optio enim dignissimos quam dolorem consectetur harum, asperiores quis fugiat praesentium labore deleniti alias delectus.
         </p>
         <div className="flex space-x-4">
-          {
-            isSignedIn ? (
-              <Button variant={"default"} asChild>
-                <Link to="/class">Go to Dashboard</Link>
-              </Button>
-            ) : (
-              <Button variant={"outline"} asChild>
-                <Link to="/login">Login</Link>
-              </Button>
-            )
-          }
+          {isSignedIn ? (
+            <Button
+              variant={"default"}
+              asChild
+            >
+              <Link to="/class">Go to Dashboard</Link>
+            </Button>
+          ) : (
+            <Button
+              variant={"default"}
+              asChild
+            >
+              <Link to="/signup">Get Started</Link>
+            </Button>
+          )}
         </div>
-          
+
         {/* //TODO: Add Image */}
         {/* <Image
         src={"/samples/preview.png"}
@@ -94,9 +110,17 @@ const FrontPage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {icons.map((icon) => (
-            <div key={icon.name} className="flex flex-col items-center">
+            <div
+              key={icon.name}
+              className="flex flex-col items-center"
+            >
               <div>
-                <img src={icon.icon} alt={icon.name} width={64} height={64} />
+                <img
+                  src={icon.icon}
+                  alt={icon.name}
+                  width={64}
+                  height={64}
+                />
               </div>
               <h2 className="text-xl font-bold mt-4">{icon.name}</h2>
               <p className="text-center">{icon.description}</p>
@@ -112,17 +136,21 @@ const FrontPage = () => {
             Join us today and never miss an event again.
           </p>
           {/* //TODO: Redundant kaya isip ka ng iba heehhehe */}
-          {
-            isSignedIn ? (
-              <Button variant={"default"} asChild>
-                <Link to="/class">Go to Dashboard</Link>
-              </Button>
-            ) : (
-              <Button variant={"default"} asChild>
-                <Link to="/login">Login</Link>
-              </Button>
-            )
-          }
+          {isSignedIn ? (
+            <Button
+              variant={"default"}
+              asChild
+            >
+              <Link to="/class">Go to Dashboard</Link>
+            </Button>
+          ) : (
+            <Button
+              variant={"default"}
+              asChild
+            >
+              <Link to="/login">Login</Link>
+            </Button>
+          )}
           <div className="mt-12">
             <p className="text-gray-400">
               &copy; {new Date().getFullYear()} Event++. All rights reserved.
@@ -131,7 +159,7 @@ const FrontPage = () => {
         </div>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default FrontPage
+export default FrontPage;
