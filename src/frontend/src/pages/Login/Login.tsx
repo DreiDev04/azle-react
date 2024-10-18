@@ -15,7 +15,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-// import { FormInputIcon } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,6 +30,9 @@ const formSchema = z.object({
 });
 
 function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,26 +41,17 @@ function Login() {
     },
   });
 
+  
+  const [error, setError] = useState<string | null>(null);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { email, password } = values;
-
-    const url = `${import.meta.env.VITE_CANISTER_URL}/app/login`;
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user_email: email, user_password: password }),
-    });
-    const data = await response.json();
-
-    if (data.status === 200) {
-      console.log("Login successful!");
+    try {
+      await login(values.email, values.password); // Call the login function
+      navigate("/");
+      // Optionally redirect or handle success
+    } catch (err) {
+      setError((err as Error).message); // Set the error message on failure
+      console.error("Login failed:", err);
     }
-
-    console.log("Data:", data);
-    console.log("Values:", values);
   }
 
   return (

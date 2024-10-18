@@ -54,6 +54,7 @@ function Signup() {
     });
 
     const data = await response.json();
+    // TODO: put the signup auth
     console.log("Data:", data);
     console.log("Values:", values);
   }

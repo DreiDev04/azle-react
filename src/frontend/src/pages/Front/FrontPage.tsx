@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Zap, BookOpen, SmilePlus, PenTool, Scroll } from "lucide-react";
 
 const FrontPage = () => {
-  // TODO: Replace with actual value
-  let isSignedIn = false;
+  const { isAuthenticated } = useAuth(); 
+  
   const [scrollPosition, setScrollPosition] = useState(0);
-
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -21,7 +21,7 @@ const FrontPage = () => {
       <nav className="w-full py-4 flex gap-4 items-center px-8 bg-card">
         <div className="text-xl font-bold text-card-foreground">ScrollUp</div>
         <div className="space-x-4">
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <>
               <Button
                 variant={"default"}
@@ -70,7 +70,7 @@ const FrontPage = () => {
               </p>
               <div className="flex space-x-4">
                 <div className="flex space-x-4">
-                  {isSignedIn ? (
+                  {isAuthenticated ? (
                     <Button
                       variant={"default"}
                       asChild
@@ -178,7 +178,7 @@ const FrontPage = () => {
             Join us today and never miss an event again.
           </p> */}
           {/* //TODO: Redundant kaya isip ka ng iba heehhehe */}
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <Button
               variant={"default"}
               asChild
