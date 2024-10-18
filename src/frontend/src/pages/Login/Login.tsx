@@ -51,7 +51,7 @@ function Login() {
 
     if (data.status === 200) {
       console.log("Login successful!");
-    } 
+    }
 
     console.log("Data:", data);
     console.log("Values:", values);
@@ -71,8 +71,18 @@ function Login() {
           </span>
           Back
         </Link>
-      <Button asChild className="fixed top-5 left-5">
-        <Link to="/"> <span><ArrowLeft size={15} /> </span>Back</Link>
+      </Button>
+      <Button
+        asChild
+        className="fixed top-5 left-5"
+      >
+        <Link to="/">
+          {" "}
+          <span>
+            <ArrowLeft size={15} />{" "}
+          </span>
+          Back
+        </Link>
       </Button>
       <Form {...form}>
         <form

@@ -114,9 +114,6 @@ export default function MultipleFlashcardCreator() {
         <Card>
           <CardHeader>
             <CardTitle>Create Tokki Cards</CardTitle>
-            <CardDescription>
-              Fill in the details for your new tokki cards.
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -234,9 +231,9 @@ export default function MultipleFlashcardCreator() {
 
       <ResizablePanel defaultSize={25}>
         <Card className="w-full mx-auto">
-          <CardHeader>
+          <CardHeader className="flex flex-col gap-0 items-start">
             <CardTitle>Flashcards ( {createdFlashcards.length} )</CardTitle>
-            <p className="text-sm text-gray-500">
+            <p className="text-[.8rem] text-gray-500">
               Created on: {new Date().toLocaleDateString()}
             </p>
           </CardHeader>

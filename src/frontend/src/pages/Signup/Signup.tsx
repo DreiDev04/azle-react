@@ -46,9 +46,13 @@ function Signup() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_username: username, user_email: email, user_password: password }),
+      body: JSON.stringify({
+        user_username: username,
+        user_email: email,
+        user_password: password,
+      }),
     });
-    
+
     const data = await response.json();
     console.log("Data:", data);
     console.log("Values:", values);
@@ -68,8 +72,6 @@ function Signup() {
           </span>
           Back
         </Link>
-      <Button asChild className="fixed top-5 left-5">
-        <Link to="/"> <span><ArrowLeft size={15} /> </span>Back</Link>
       </Button>
       <Form {...form}>
         <form

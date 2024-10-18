@@ -14,17 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   BookOpen,
@@ -37,9 +26,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import DialogEditDeck from "./_components/DialogEditDeck";
+import DialogDeleteDeck from "./_components/DialogDeleteDeck";
 
-interface ClassData {
-  id: string;
+interface Classes {
+  id: number;
   name: string;
   icon: string;
   deckCount: number;
@@ -49,9 +40,9 @@ interface ClassData {
   isLiked: boolean;
 }
 
-const sampleClasses: ClassData[] = [
+const sampleClasses: Classes[] = [
   {
-    id: "1",
+    id: 1,
     name: "Mathematics",
     icon: "M",
     deckCount: 5,
@@ -61,7 +52,7 @@ const sampleClasses: ClassData[] = [
     isLiked: false,
   },
   {
-    id: "2",
+    id: 2,
     name: "History",
     icon: "H",
     deckCount: 3,
@@ -74,15 +65,15 @@ const sampleClasses: ClassData[] = [
   // Add more sample classes as needed
 ];
 
-export default function TwitterStyleClassLayout() {
-  const [classes, setClasses] = useState<ClassData[]>(sampleClasses);
+export default function Classes() {
+  const [classes, setClasses] = useState<Classes[]>(sampleClasses);
   const [isGridLayout, setIsGridLayout] = useState(false);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     setClasses(classes.filter((c) => c.id !== id));
   };
 
-  const handleLike = (id: string) => {
+  const handleLike = (id: number) => {
     setClasses(
       classes.map((c) => {
         if (c.id === id) {
@@ -148,40 +139,23 @@ export default function TwitterStyleClassLayout() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <DropdownMenuItem
-                            onSelect={(e) => e.preventDefault()}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently delete the class and all its
-                              associated decks and flashcards.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(classItem.id)}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <DialogEditDeck
+                        name={classItem.name}
+                        description={classItem.description}
+                      >
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Pencil className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                      </DialogEditDeck>
+                      <DialogDeleteDeck
+                        handleDelete={() => handleDelete(classItem.id)}
+                      >
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DialogDeleteDeck>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
