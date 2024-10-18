@@ -268,26 +268,28 @@ function EditDeck() {
                     </CardFooter>
                   </Card>
                 ))}
+                <div className="z-50 sticky bottom-4 flex justify-end pr-5 gap-4">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() =>
+                      append({ question: "", answer: "", hint: "" })
+                    }
+                  >
+                    <PlusCircle className="w-4 h-4 mr-2" />
+                    Add Flashcard
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                  >
+                    Save Flashcards
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
         </Card>
-        <div className="z-50 sticky bottom-4 flex justify-end pr-5 gap-4">
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => append({ question: "", answer: "", hint: "" })}
-          >
-            <PlusCircle className="w-4 h-4 mr-2" />
-            Add Flashcard
-          </Button>
-          <Button
-            type="submit"
-            size="sm"
-          >
-            Save Flashcards
-          </Button>
-        </div>
       </ResizablePanel>
 
       <ResizableHandle withHandle />
