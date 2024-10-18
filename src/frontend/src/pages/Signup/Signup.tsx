@@ -60,16 +60,9 @@ function Signup() {
 
   return (
     <div className="bg-background flex items-center justify-center h-full w-full">
-      {/* //TODO: Pakihanap nalang actual size */}
-      <Button
-        asChild
-        className="fixed top-5 left-5"
-      >
-        <Link to="/">
-          {" "}
-          <span>
-            <ArrowLeft size={15} />{" "}
-          </span>
+      <Button asChild className="fixed top-5 left-5">
+        <Link to="/"> 
+          <span><ArrowLeft size={15} /> </span>
           Back
         </Link>
       </Button>
@@ -137,10 +130,7 @@ function Signup() {
             >
               Submit
             </Button>
-            <Link
-              to="/login"
-              className="bg-secondary text-foreground"
-            >
+            <Link to="/login">
               <Button variant={"outline"}>Log in</Button>
             </Link>
           </div>

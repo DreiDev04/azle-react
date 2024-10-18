@@ -55,9 +55,9 @@ export default class UserController {
       user.user_password = password.hash;
       user.user_salt = password.salt;
 
-      console.log(user_password);
-      console.log(password.hash);
-      console.log(password.salt);
+      // console.log(user_password);
+      // console.log(password.hash);
+      // console.log(password.salt);
 
 
       user.classes = [];
@@ -135,24 +135,24 @@ export default class UserController {
       if (!user) {
         throw new Error("User not found!");
       }
-      console.log(user_password);
-      console.log(user.user_password);
-      console.log(user.user_salt);
+      // console.log(user_password);
+      // console.log(user.user_password);
+      // console.log(user.user_salt);
 
-      const isMatch = await verifyPassword(user_password, user.user_password, user.user_salt);
+      const isMatch = verifyPassword(user_password, user.user_password, user.user_salt);
 
-      // if (!isMatch) {
-      //   return response.status(400).json({
-      //     status: 400,
-      //     message: "Invalid password!",
-      //   });
-      // }
+      if (!isMatch) {
+        return response.status(400).json({
+          status: 400,
+          message: "Invalid password!",
+        });
+      }
 
-      // return response.status(200).json({
-      //   status: 200,
-      //   message: "Login successful!",
-      // });
-      return response.status(200).json({status: 200,message: isMatch});
+      return response.status(200).json({
+        status: 200,
+        message: "Login successful!",
+      });
+      
     } catch (error) {
       return response.status(400).json({ message: "Error in login", error: error });
     }

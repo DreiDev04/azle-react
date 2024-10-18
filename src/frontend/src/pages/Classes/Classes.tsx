@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -32,7 +32,7 @@ import DialogDeleteDeck from "./_components/DialogDeleteDeck";
 interface Classes {
   id: number;
   name: string;
-  icon: string;
+  icon?: string;
   deckCount: number;
   description: string;
   createdAt: string;
@@ -88,6 +88,7 @@ export default function Classes() {
     );
   };
 
+  // TODO: should be moved to a utility file
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -176,25 +177,26 @@ export default function Classes() {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`p-0 h-auto font-normal ${classItem.isLiked ? "text-red-500" : ""}`}
-                onClick={() => handleLike(classItem.id)}
-              >
-                <Heart
-                  className={`mr-1 h-4 w-4 ${classItem.isLiked ? "fill-current" : ""}`}
-                />
-                {classItem.likes}
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="ml-auto"
-              >
-                <Link to="/deck">See Decks</Link>
-                <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+                  className={`p-0 h-auto font-normal ${classItem.isLiked ? "text-destructive" : ""}`}
+                  onClick={() => handleLike(classItem.id)}
+                >
+                  <Heart
+                    className={`mr-1 h-4 w-4 ${classItem.isLiked ? "fill-current" : ""}`}
+                  />
+                  {classItem.likes}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="ml-auto"
+                >
+                  <Link to="/deck">See Decks</Link>
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
+        }
       </div>
     </div>
   );
