@@ -25,13 +25,14 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route
-          path="class"
+          path="classes"
           element={
             <Navigation>
               <Classes />
             </Navigation>
           }
         />
+        <Route path="classes/:id/decks" element={<Navigation><Deck /></Navigation>} />
         <Route
           path="create"
           element={
@@ -40,15 +41,6 @@ function App() {
             </Navigation>
           }
         />
-        <Route
-          path="deck/:id"
-          element={
-            <Navigation>
-              <Deck />
-            </Navigation>
-          }
-        />
-        {/* //TODO: add /:id */}
         <Route
           path="deck/edit"
           element={

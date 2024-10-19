@@ -16,93 +16,95 @@ import { TDeck } from "@/types/types";
 
 const sampleDecks: TDeck[] = [
   {
-    id: 1,
-    name: "JavaScript Basics",
-    description: "Fundamental concepts of JavaScript",
-    createdAt: "test",
-    cardCount: 30,
-    userOwner: {
-      id: 1,
-      username: "test",
-      email: "test@test.com",
-      password: "test",
-      salt: "test",
-      createdAt: "test"
+    deck_id: 1,
+    deck_name: "JavaScript Basics",
+    deck_description: "Fundamental concepts of JavaScript",
+    deck_createdAt: "test",
+    deck_cardCount: 30,
+    // card_id: 
+    deck_userOwner: {
+      user_id: 1,
+      user_username: "test",
+      user_email: "test@test.com",
+      user_password: "test",
+      user_salt: "test",
+      user_createdAt: "test"
     }
   },
   {
-    id: 2,
-    name: "React Hooks",
-    description: "Understanding and using React Hooks",
-    createdAt: "test",
-    cardCount: 30,
-    userOwner: {
-      id: 1,
-      username: "test",
-      email: "test@test.com",
-      password: "test",
-      salt: "test",
-      createdAt: "test"
+    deck_id: 2,
+    deck_name: "React Hooks",
+    deck_description: "Understanding and using React Hooks",
+    deck_createdAt: "test",
+    deck_cardCount: 30,
+    // card_id: 
+    deck_userOwner: {
+      user_id: 1,
+      user_username: "test",
+      user_email: "test@test.com",
+      user_password: "test",
+      user_salt: "test",
+      user_createdAt: "test"
     }
   },
   {
-    id: 3,
-    name: "CSS Flexbox",
-    cardCount: 20,
-    description: "Mastering CSS Flexbox layout",
-    createdAt: "test",
-    userOwner: {
-      id: 1,
-      username: "test",
-      email: "test@test.com",
-      password: "test",
-      salt: "test",
-      createdAt: "test"
+    deck_id: 3,
+    deck_name: "CSS Flexbox",
+    deck_cardCount: 20,
+    deck_description: "Mastering CSS Flexbox layout",
+    deck_createdAt: "test",
+    deck_userOwner: {
+      user_id: 1,
+      user_username: "test",
+      user_email: "test@test.com",
+      user_password: "test",
+      user_salt: "test",
+      user_createdAt: "test"
     }
   },
   {
-    id: 4,
-    name: "Python Data Structures",
-    cardCount: 35,
-    description: "Common data structures in Python",
-    createdAt: "test",
-    userOwner: {
-      id: 1,
-      username: "test",
-      email: "test@test.com",
-      password: "test",
-      salt: "test",
-      createdAt: "test"
+    deck_id: 4,
+    deck_name: "Python Data Structures",
+    deck_cardCount: 35,
+    deck_description: "Common data structures in Python",
+    deck_createdAt: "test",
+    deck_userOwner: {
+      user_id: 1,
+      user_username: "test",
+      user_email: "test@test.com",
+      user_password: "test",
+      user_salt: "test",
+      user_createdAt: "test"
     }
   },
   {
-    id: 5,
-    name: "SQL Queries",
-    cardCount: 40,
-    description: "Essential SQL queries for database management",
-    createdAt: "test",
-    userOwner: {
-      id: 1,
-      username: "test",
-      email: "test@test.com",
-      password: "test",
-      salt: "test",
-      createdAt: "test"
+    deck_id: 5,
+    deck_name: "SQL Queries",
+    deck_cardCount: 40,
+    deck_description: "Essential SQL queries for database management",
+    deck_createdAt: "test",
+    deck_userOwner: {
+      user_id: 1,
+      user_username: "test",
+      user_email: "test@test.com",
+      user_password: "test",
+      user_salt: "test",
+      user_createdAt: "test"
     }
   },
   {
-    id: 6,
-    name: "Git Commands",
-    cardCount: 15,
-    description: "Frequently used Git commands",
-    createdAt: "test",
-    userOwner: {
-      id: 1,
-      username: "test",
-      email: "test@test.com",
-      password: "test",
-      salt: "test",
-      createdAt: "test"
+    deck_id: 6,
+    deck_name: "Git Commands",
+    deck_cardCount: 15,
+    deck_description: "Frequently used Git commands",
+    deck_createdAt: "test",
+    deck_userOwner: {
+      user_id: 1,
+      user_username: "test",
+      user_email: "test@test.com",
+      user_password: "test",
+      user_salt: "test",
+      user_createdAt: "test"
     }
   },
 ];
@@ -115,58 +117,41 @@ export default function FlashcardDecks() {
   const { id } = useParams();
 
   useEffect(() => {
-      const fetchDecks = async () => {
-        try {
-          console.log(id);
-          const url = `${import.meta.env.VITE_CANISTER_URL}/app/class_decks/${id}`;
-          const response = await fetch(url, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (!response.ok) {
-            console.log("Network response was not ok");
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("Fetched Decks:", data); // Debug: Log fetched data
-          if (data && data.payload) {
-            const mappedDecks = data.payload.map((item: any) => ({
-              id: item.deck_id,
-              name: item.deck_name,
-              description: item.deck_description,
-              createdAt: item.deck_createdAt,
-              cardCount: item.deck_cardCount,
-              userOwner: {
-                id: item.deck_userOwner.user_id,
-                username: item.deck_userOwner.user_username,
-                email: item.deck_userOwner.user_email,
-                password: item.deck_userOwner.user_password,
-                salt: item.deck_userOwner.user_salt,
-                createdAt: item.deck_userOwner.user_createdAt
-              }
-            }));
-            setDecks(mappedDecks);
-          } else {
-            throw new Error("Data format unexpected");
-          }
-        } catch (error) {
-          console.error("Failed to fetch decks:", error);
-          setError("Failed to fetch decks. Please try again later.");
-          setDecks(sampleDecks); // Fall back to sample data
+    const fetchDecks = async () => {
+      try {
+        console.log("ID:", id);
+        const url = `${import.meta.env.VITE_CANISTER_URL}/app/class_decks/${id}`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          console.log("Network response was not ok");
+          throw new Error("Network response was not ok");
         }
-      };
-      fetchDecks();
+        const data = await response.json();
+        console.log("Fetched Decks:", data); // Debug: Log fetched data
+        setDecks(data.payload);
+
+      } catch (error) {
+        console.error("Failed to fetch decks:", error);
+        setError("Failed to fetch decks. Please try again later.");
+        setDecks(sampleDecks); // Fall back to sample data
+      }
+    };
+    fetchDecks();
   }, []);
 
   const filteredDecks = decks.filter((deck) =>
-    deck.name.toLowerCase().includes(searchTerm.toLowerCase())
+    deck.deck_name && deck.deck_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="container-page">
-      <h1 className="text-2xl font-bold py-6 px-4">Programming 101</h1>
+      {/* TODO: Should be the deck name */}
+      <h1 className="text-2xl font-bold py-6 px-4">Decks</h1>
 
       <div className="relative">
         <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -186,15 +171,15 @@ export default function FlashcardDecks() {
       ) : (
         <div className="grid grid-cols-1 mt-6 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredDecks.map((deck) => (
-            <Card key={deck.id} className="flex flex-col">
+            <Card key={deck.deck_id} className="flex flex-col">
               <CardHeader className="flex">
-                <CardTitle>{deck.name}</CardTitle>
+                <CardTitle>{deck.deck_name}</CardTitle>
                 <Badge className="px-2 py-1" variant="secondary">
-                  {deck.cardCount} cards
+                  {deck.deck_cardCount} cards
                 </Badge>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-500">{deck.description}</p>
+                <p className="text-sm text-gray-500">{deck.deck_description}</p>
               </CardContent>
               <CardFooter className="flex justify-between mt-auto">
                 <Link to={`edit`}>
@@ -203,7 +188,7 @@ export default function FlashcardDecks() {
                     Edit
                   </Button>
                 </Link>
-                <Link to="/flashcards">
+                <Link to={`flashcard/2`}>
                   <Button className="font-bold" size="sm">
                     <BookOpen className=" w-4 h-4 mr-2" />
                     Study

@@ -1,16 +1,9 @@
 // AuthContext.tsx
+import { TUser } from "@/types/types";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-interface User {
-  user_id: number;
-  user_username: string;
-  user_email: string;
-  user_password: string;
-  user_salt: string;
-  user_createdAt: Date;
-}
 interface AuthContextType {
-  user: User;
+  user: TUser;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -60,7 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (storedUser) {
         const userFromDatabase = await doubleCheckUserInDatabase(JSON.parse(storedUser).user_id); // Await the async function
         
-        console.log(userFromDatabase);
+        // console.log(userFromDatabase);
   
         if (userFromDatabase === null) {
           // If the user exists in the database, log out

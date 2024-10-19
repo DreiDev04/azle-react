@@ -21,7 +21,7 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
   const links = [
     {
       label: "Classes",
-      href: "/class",
+      href: "/classes",
       icon: (
         <IconHome2 className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),

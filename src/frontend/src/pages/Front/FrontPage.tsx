@@ -27,7 +27,7 @@ const FrontPage = () => {
                 variant={"default"}
                 asChild
               >
-                <Link to="/class">Home</Link>
+                <Link to="/classes">Home</Link>
               </Button>
             </>
           ) : (

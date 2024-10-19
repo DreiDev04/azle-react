@@ -26,51 +26,23 @@ import {
 import { Link } from "react-router-dom";
 import DialogEditDeck from "./_components/DialogEditDeck";
 import DialogDeleteDeck from "./_components/DialogDeleteDeck";
+import { TClass } from "@/types/types";
+import { useAuth } from "@/context/AuthContext";
 
-interface ClassItem {
-  id: number;
-  name: string;
-  icon?: string;
-  deckCount: number;
-  description: string;
-  createdAt: string;
-  likes: number;
-  isLiked: boolean;
-}
-
-const sampleClasses: ClassItem[] = [
-  {
-    id: 1,
-    name: "Mathematics",
-    icon: "M",
-    deckCount: 5,
-    description: "Algebra, Geometry, and Calculus flashcards",
-    createdAt: "2023-05-15T10:30:00Z",
-    likes: 15,
-    isLiked: false,
-  },
-  {
-    id: 2,
-    name: "History",
-    icon: "H",
-    deckCount: 3,
-    description: "World History and American History flashcards",
-    createdAt: "2023-06-01T14:45:00Z",
-    likes: 8,
-    isLiked: true,
-  },
-];
 
 export default function Classes() {
-  const [classes, setClasses] = useState<ClassItem[]>(sampleClasses); // Use sample data initially
+  const [classes, setClasses] = useState<TClass[]>([]); // Use sample data initially
   const [isGridLayout, setIsGridLayout] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { user } = useAuth();
+
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const userId = "1"; // Replace with actual user ID
-        const url = `${import.meta.env.VITE_CANISTER_URL}/app/${userId}/classes`;
+        const user_id = user.user_id;
+        const url = `${import.meta.env.VITE_CANISTER_URL}/app/${user_id}/classes`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -81,26 +53,12 @@ export default function Classes() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log("Fetched Data:", data); 
+        setClasses(data.payload);
 
-        console.log("Fetched Data:", data); // Debug: Log fetched data
-        if (data && data.payload) {
-          const mappedClasses = data.payload.map((item: any) => ({
-            id: item.class_id,
-            name: item.class_name,
-            description: item.class_description,
-            createdAt: item.class_createdAt,
-            deckCount: item.deck_count, // Set default or fetch this if available
-            likes: 0, // Set default or fetch this if available
-            isLiked: false, // Set default or fetch this if available
-          }));
-          setClasses(mappedClasses);
-        } else {
-          throw new Error("Data format unexpected");
-        }
       } catch (error) {
         console.error("Failed to fetch classes:", error);
         setError("Failed to fetch classes. Please try again later.");
-        setClasses(sampleClasses); // Fall back to sample data
       }
     };
 
@@ -108,25 +66,25 @@ export default function Classes() {
   }, []);
 
   const handleDelete = (id: number) => {
-    setClasses((prevClasses) => prevClasses.filter((c) => c.id !== id));
+    // setClasses((prevClasses) => prevClasses.filter((c) => c.id !== id));
   };
 
   const handleLike = (id: number) => {
-    setClasses((prevClasses) =>
-      prevClasses.map((c) => {
-        if (c.id === id) {
-          return {
-            ...c,
-            likes: c.isLiked ? c.likes - 1 : c.likes + 1,
-            isLiked: !c.isLiked,
-          };
-        }
-        return c;
-      })
-    );
+    // setClasses((prevClasses) =>
+    //   prevClasses.map((c) => {
+    //     if (c.id === id) {
+    //       return {
+    //         ...c,
+    //         likes: c.isLiked ? c.likes - 1 : c.likes + 1,
+    //         isLiked: !c.isLiked,
+    //       };
+    //     }
+    //     return c;
+    //   })
+    // );
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: Date) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -138,7 +96,7 @@ export default function Classes() {
   return (
     <div className="container-page">
       <div className="flex items-center sticky top-0 bg-background z-10 py-2">
-        <h1 className="text-2xl font-bold py-6 px-4">Your Classes</h1>
+        <h1 className="text-2xl font-bold py-6 px-4">Your Classes </h1>
         <Button
           variant="outline"
           size="icon"
@@ -151,25 +109,25 @@ export default function Classes() {
           )}
         </Button>
       </div>
-      {error && <div className="text-red-500">{error}</div>}
+      {error && <div className="text-destrcutive">{error}</div>}
       <div
         className={`grid gap-4 ${isGridLayout ? "md:grid-cols-2" : "grid-cols-1"}`}
       >
         {classes.length === 0 ? (
           <div>No classes available.</div>
         ) : (
-          classes.map((classItem: ClassItem) => (
+          classes.map((classItem: TClass) => (
             <Card
-              key={classItem.id}
+              key={classItem.class_id}
               className="overflow-hidden border-b border-border hover:bg-accent transition-colors"
             >
               <CardHeader className="flex flex-row items-start gap-4 p-4">
                 <Avatar className="w-10 h-10">
-                  <AvatarFallback>{classItem.icon}</AvatarFallback>
+                  <AvatarFallback>{classItem.class_icon}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold">{classItem.name}</h2>
+                    <h2 className="text-lg font-semibold">{classItem.class_name}</h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -178,8 +136,8 @@ export default function Classes() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DialogEditDeck
-                          name={classItem.name}
-                          description={classItem.description}
+                          name={classItem.class_name}
+                          description={classItem.class_description}
                         >
                           <DropdownMenuItem
                             onSelect={(e) => e.preventDefault()}
@@ -189,7 +147,7 @@ export default function Classes() {
                           </DropdownMenuItem>
                         </DialogEditDeck>
                         <DialogDeleteDeck
-                          handleDelete={() => handleDelete(classItem.id)}
+                          handleDelete={() => handleDelete(classItem.class_id)}
                         >
                           <DropdownMenuItem
                             onSelect={(e) => e.preventDefault()}
@@ -202,20 +160,20 @@ export default function Classes() {
                     </DropdownMenu>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {formatDate(classItem.createdAt)}
+                    {formatDate(classItem.class_createdAt)}
                   </p>
                 </div>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <p className="text-sm mb-2">{classItem.description}</p>
+                <p className="text-sm mb-2">{classItem.class_description}</p>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <BookOpen className="mr-1 h-4 w-4" />
-                  {classItem.deckCount}{" "}
-                  {classItem.deckCount === 1 ? "deck" : "decks"}
+                  {classItem.class_deckCount}{" "}
+                  {classItem.class_deckCount === 1 ? "deck" : "decks"}
                 </div>
               </CardContent>
               <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                <Button
+                {/* <Button
                   variant="ghost"
                   size="sm"
                   className={`p-0 h-auto font-normal ${classItem.isLiked ? "text-destructive" : ""}`}
@@ -225,10 +183,10 @@ export default function Classes() {
                     className={`mr-1 h-4 w-4 ${classItem.isLiked ? "fill-current" : ""}`}
                   />
                   {classItem.likes}
-                </Button>
+                </Button> */}
                 <Button variant="ghost" size="sm" className="ml-auto">
                   <Link
-                    to={`/deck/${classItem.id}`}
+                    to={`/classes/${classItem.class_id}/decks`}
                     className="flex items-center"
                   >
                     See Decks
@@ -239,6 +197,7 @@ export default function Classes() {
             </Card>
           ))
         )}
+
       </div>
     </div>
   );
