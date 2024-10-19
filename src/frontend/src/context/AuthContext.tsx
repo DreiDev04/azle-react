@@ -37,6 +37,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const userFromDatabase = await doubleCheckUserInDatabase(JSON.parse(storedUser).user_id); // Await the async function
 
         // console.log(userFromDatabase);
+        console.log("User ID:",userFromDatabase.user_id);
 
         if (userFromDatabase === null) {
           // If the user exists in the database, log out

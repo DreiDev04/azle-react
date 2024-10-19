@@ -63,7 +63,7 @@ export default function Classes() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        // console.log("Fetched Data:", data);
+        console.log("Fetched Data:", data);
         setClasses(data.payload);
 
       } catch (error) {
@@ -156,7 +156,9 @@ export default function Classes() {
             >
               <CardHeader className="flex flex-row items-start gap-4 p-4">
                 <Avatar className="w-10 h-10">
-                  <AvatarFallback>{classItem.class_icon}</AvatarFallback>
+                  <AvatarFallback>
+                    <img src="https://cdn-icons-png.flaticon.com/128/17848/17848821.png" alt="icon" />
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
@@ -220,6 +222,7 @@ export default function Classes() {
                 <Button variant="ghost" size="sm" className="ml-auto">
                   <Link
                     to={`/classes/${classItem.class_id}/decks`}
+                    state={{ class_name: classItem.class_name }}
                     className="flex items-center"
                   >
                     See Decks

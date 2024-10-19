@@ -11,21 +11,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, BookOpen, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { TDeck } from "@/types/types";
+import DialogAddDeck from "./_components/DialogAddDeck";
+import useStore from "@/store/useStore";
 
 
 export default function FlashcardDecks() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [decks, setDecks] = useState<TDeck[]>([]);
+  // const [decks, setDecks] = useState<TDeck[]>([]);
+  const { decks, setDecks } = useStore();
   const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams();
+  const location = useLocation();
+  const { class_name } = location.state || {};
 
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        console.log("ID:", id);
         const url = `${import.meta.env.VITE_CANISTER_URL}/app/class_decks/${id}`;
         const response = await fetch(url, {
           method: "GET",
@@ -55,18 +59,20 @@ export default function FlashcardDecks() {
 
   return (
     <div className="container-page">
-      {/* TODO: Should be the deck name */}
-      <h1 className="text-2xl font-bold py-6 px-4">Decks</h1>
-
+      <h1 className="text-2xl font-bold py-6 px-4">{class_name}</h1>
       <div className="relative">
         <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-        <Input
-          type="text"
-          placeholder="Search decks..."
-          className="pl-10"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="flex gap-5">
+
+          <Input
+            type="text"
+            placeholder="Search decks..."
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <DialogAddDeck />
+        </div>
       </div>
 
       {filteredDecks.length === 0 ? (
