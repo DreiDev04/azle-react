@@ -3,7 +3,6 @@ import UserController from 'App/Controllers/Http/UserController';
 import DeckController from 'App/Controllers/Http/DeckController';
 import ClassController from 'App/Controllers/Http/ClassController';
 import { Router } from 'express';
-import AuthController from 'App/Controllers/Http/AuthController';
 const Route = Router();
 
 /*
@@ -21,7 +20,7 @@ const Route = Router();
 
 /* User */
 Route.get('/app/users', UserController.users);
-Route.get('/app/get_user', UserController.get_user);
+Route.get('/app/get_user/:user_id', UserController.get_user);
 Route.post('/app/create_user', UserController.create_user);
 Route.post('/app/update_user', UserController.update_user);
 Route.post('/app/delete_user', UserController.delete_user);

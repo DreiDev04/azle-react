@@ -34,8 +34,8 @@ export default class DeckController {
             const deck = new Deck();
             deck.deck_name = deck_name;
             deck.deck_description = deck_description;
-            deck.user = user;
-            deck.classEntities = classes;
+            deck.deck_userOwner = user;
+            deck.deck_classEntities = classes;
 
             await Deck.save(deck);
 
@@ -120,7 +120,7 @@ export default class DeckController {
             }
     
             // Remove the deck from each associated class
-            const classEntities = deck.classEntities;
+            const classEntities = deck.deck_classEntities;
             for (const classEntity of classEntities) {
                 // Decrease the deck count
                 if (classEntity.class_deckCount > 0) {
@@ -153,9 +153,9 @@ export default class DeckController {
 
         try {
             const user_decks = await Deck.find({
-                where: {user: {user_id: user_id}},
+                where: {deck_userOwner: {user_id: user_id}},
             });
-            return res.status(200).json({ message: "Success in fetching decks", data: user_decks });
+            return res.status(200).json({ message: "Success in fetching decks", payload: user_decks });
         } catch (error) {
             return res.status(400).json({ message: "Error fetching decks", error });
         }
@@ -166,9 +166,9 @@ export default class DeckController {
 
         try {
             const user_decks = await Deck.find({
-                where: {classEntities: {class_id: class_id}},
+                where: {deck_classEntities: {class_id: class_id}},
             });
-            return res.status(200).json({ message: "Success in fetching decks", data: user_decks });
+            return res.status(200).json({ message: "Success in fetching decks", payload: user_decks });
         } catch (error) {
             return res.status(400).json({ message: "Error fetching decks", error });
         }

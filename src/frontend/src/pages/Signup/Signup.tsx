@@ -37,6 +37,8 @@ function Signup() {
     },
   });
 
+  const navigate = useNavigate();
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { username, email, password } = values;
 
@@ -57,7 +59,7 @@ function Signup() {
     try {
       if (data.status === 200) {
         console.log("Signup successful!");
-        window.location.href = "/login";
+        navigate("/login");
       } else {
         throw new Error(data.message || "Signup failed");
       }

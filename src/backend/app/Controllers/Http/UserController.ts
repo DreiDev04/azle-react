@@ -25,18 +25,20 @@ export default class UserController {
   }
 
   static async get_user(request: Request, response: Response) {
-    const { user_id } = request.body;
+    const user_id = parseInt(request.params.user_id);
     try {
       const user = await User.findOneBy({ user_id });
       if (!user) {
-        throw new Error("User not found!");
+        return response
+        .status(200)
+        .json({message: "No user found!", data: user});
       }
       return response
         .status(200)
         .json({message: "Success in getting the user", data: user});
     } catch (error) {
       return response
-        .status(500)
+        .status(400)
         .json({ message: "Error in getting the user.", error });
     }
   }

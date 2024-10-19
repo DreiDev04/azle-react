@@ -61,8 +61,6 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
 
   const [open, setOpen] = useState(false);
   const {user} = useAuth();
-  console.log(user);
-  
 
   return (
     <div

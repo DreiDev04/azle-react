@@ -27,6 +27,6 @@ export class User extends BaseEntity {
   @JoinTable()  
   classes: Class[];
 
-  @OneToMany(() => Deck, (deck) => deck.user)
+  @OneToMany(() => Deck, (deck) => deck.deck_userOwner)
   decks: Deck[];
 }

@@ -24,6 +24,6 @@ export class Card extends BaseEntity {
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   card_createdAt: Date;
 
-  @ManyToOne(() => Deck, (deck) => deck.cards, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Deck, (deck) => deck.deck_cards, { onDelete: 'CASCADE' })
   deck: Deck;
 }
