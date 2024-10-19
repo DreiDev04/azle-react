@@ -33,6 +33,7 @@ Route.get('/app/status', UserController.status);
 Route.get('/app/:deck_id/cards', CardController.cards);
 Route.get('/app/get_card', CardController.get_card);
 Route.post('/app/create_card', CardController.create_card);
+Route.post('/app/:deck_id/create_cards', CardController.create_cards); //to create many cards at once, used in creating decks
 Route.post('/app/update_card', CardController.update_card);
 Route.post('/app/delete_card', CardController.delete_card);
 
@@ -44,6 +45,8 @@ Route.get('/app/get_deck/:id', DeckController.get_deck);
 Route.post('/app/create_deck', DeckController.create_deck);
 Route.post('/app/update_deck/:id', DeckController.update_deck);
 Route.post('/app/delete_deck/:id', DeckController.delete_deck);
+Route.post('/app/add_deckToClass/:deck_id/:class_id', DeckController.add_deckToClass);
+Route.post('/app/remove_deckFromClass/:deck_id/:class_id', DeckController.remove_deckFromClass);
 
 /* Class */
 Route.get('/app/:user_id/classes', ClassController.classes);
