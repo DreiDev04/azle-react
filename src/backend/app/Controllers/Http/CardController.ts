@@ -29,13 +29,14 @@ export default class CardController {
         const deck_id = parseInt(request.params.deck_id);
         const { cards } = request.body;
         try {
+            const cardsArray: Card[] = cards;
             const deck = await Deck.findOneBy({deck_id});
             if (!deck){
                 throw new Error("Deck not found!");
             }
             console.log("cardssssss");
             const cardEntities = [];
-            for (const cardData of cards) {
+            for (const cardData of cardsArray) {
                 const card = new Card();
                 card.card_question = cardData.card_question;
                 card.card_answer = cardData.card_answer;
@@ -46,6 +47,8 @@ export default class CardController {
                 await Card.save(card);
                 cardEntities.push(card);
             }
+            deck.deck_cardCount = cardsArray.length;
+            await deck.save();
             return response.status(201).json({ message: "Cards created!"});
         } catch (error) {
             return response.status(400).json({ message: "Error in creating card: ", error })

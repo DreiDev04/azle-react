@@ -190,6 +190,14 @@ export default class DeckController {
                 throw new Error("Class not found");
             }
             console.log("1");
+            if (!deck.deck_classEntities) {
+                deck.deck_classEntities = [];
+            }
+            if (classEntity){
+                classEntity.class_deckCount += 1;
+                await classEntity.save();
+            }
+            //TODO: check if deck is already in class
             deck.deck_classEntities.push(classEntity);
             console.log("2");
             await deck.save();
@@ -213,6 +221,13 @@ export default class DeckController {
             if (!classEntity) {
                 throw new Error("Class not found");
             }
+            if (classEntity){
+                classEntity.class_deckCount -= 1;
+                await classEntity.save();
+            }
+            // if (!deck.deck_classEntities) {
+            //     deck.deck_classEntities = [];
+            // }
             deck.deck_classEntities = deck.deck_classEntities.filter((classEntity) => classEntity.class_id !== class_id);
             await deck.save();
             return res.status(200).json({ message: "Success in removing deck from class" });
