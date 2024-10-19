@@ -84,7 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const data = await response.json();
 
     if (data.status === 200) {
-      localStorage.setItem('user', JSON.stringify(data.user));
+      const filteredUser = {
+        user_id: data.user.user_id,
+        user_name: data.user.user_username,
+        user_createdAt: data.user.user_createdAt,
+      }
+      localStorage.setItem('user', JSON.stringify(filteredUser));
       setUser(data.user); // Assuming the user data comes back in the response
       setIsAuthenticated(true);
       console.log("Login successful!");
