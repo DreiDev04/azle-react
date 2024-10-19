@@ -162,12 +162,12 @@ export default class UserController {
       // console.log(`Session ID: ${request.sessionID}`);
       // console.log(`Session Store: ${request.sessionStore}`);
 
-      request.session.save(err => {
-          if (err) {
-              return response.status(500).json({ message: 'Failed to save session' });
-          }
-          response.json({ message: 'Profile updated successfully' });
-      });
+      // request.session.save(err => {
+      //     if (err) {
+      //         return response.status(500).json({ message: 'Failed to save session' });
+      //     }
+      //     response.json({ message: 'Profile updated successfully' });
+      // });
 
       return response.status(200).send({
         status: 200,

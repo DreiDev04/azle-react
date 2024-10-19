@@ -1,6 +1,5 @@
-// import cors from 'cors';
 import express from 'express';
-import session from "express-session";
+// import session from "express-session";
 import ExceptionHandler from './app/Exceptions/Handler';
 import { routes } from './start/routes';
 import cors from 'cors';
