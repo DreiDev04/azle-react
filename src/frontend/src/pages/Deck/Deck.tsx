@@ -14,104 +14,10 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { TDeck } from "@/types/types";
 
-const sampleDecks: TDeck[] = [
-  {
-    deck_id: 1,
-    deck_name: "JavaScript Basics",
-    deck_description: "Fundamental concepts of JavaScript",
-    deck_createdAt: "test",
-    deck_cardCount: 30,
-    // card_id: 
-    deck_userOwner: {
-      user_id: 1,
-      user_username: "test",
-      user_email: "test@test.com",
-      user_password: "test",
-      user_salt: "test",
-      user_createdAt: "test"
-    }
-  },
-  {
-    deck_id: 2,
-    deck_name: "React Hooks",
-    deck_description: "Understanding and using React Hooks",
-    deck_createdAt: "test",
-    deck_cardCount: 30,
-    // card_id: 
-    deck_userOwner: {
-      user_id: 1,
-      user_username: "test",
-      user_email: "test@test.com",
-      user_password: "test",
-      user_salt: "test",
-      user_createdAt: "test"
-    }
-  },
-  {
-    deck_id: 3,
-    deck_name: "CSS Flexbox",
-    deck_cardCount: 20,
-    deck_description: "Mastering CSS Flexbox layout",
-    deck_createdAt: "test",
-    deck_userOwner: {
-      user_id: 1,
-      user_username: "test",
-      user_email: "test@test.com",
-      user_password: "test",
-      user_salt: "test",
-      user_createdAt: "test"
-    }
-  },
-  {
-    deck_id: 4,
-    deck_name: "Python Data Structures",
-    deck_cardCount: 35,
-    deck_description: "Common data structures in Python",
-    deck_createdAt: "test",
-    deck_userOwner: {
-      user_id: 1,
-      user_username: "test",
-      user_email: "test@test.com",
-      user_password: "test",
-      user_salt: "test",
-      user_createdAt: "test"
-    }
-  },
-  {
-    deck_id: 5,
-    deck_name: "SQL Queries",
-    deck_cardCount: 40,
-    deck_description: "Essential SQL queries for database management",
-    deck_createdAt: "test",
-    deck_userOwner: {
-      user_id: 1,
-      user_username: "test",
-      user_email: "test@test.com",
-      user_password: "test",
-      user_salt: "test",
-      user_createdAt: "test"
-    }
-  },
-  {
-    deck_id: 6,
-    deck_name: "Git Commands",
-    deck_cardCount: 15,
-    deck_description: "Frequently used Git commands",
-    deck_createdAt: "test",
-    deck_userOwner: {
-      user_id: 1,
-      user_username: "test",
-      user_email: "test@test.com",
-      user_password: "test",
-      user_salt: "test",
-      user_createdAt: "test"
-    }
-  },
-];
 
 export default function FlashcardDecks() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [decks, setDecks] = useState<TDeck[]>(sampleDecks);
+  const [decks, setDecks] = useState<TDeck[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams();
@@ -138,7 +44,6 @@ export default function FlashcardDecks() {
       } catch (error) {
         console.error("Failed to fetch decks:", error);
         setError("Failed to fetch decks. Please try again later.");
-        setDecks(sampleDecks); // Fall back to sample data
       }
     };
     fetchDecks();

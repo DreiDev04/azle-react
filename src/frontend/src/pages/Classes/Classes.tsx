@@ -52,7 +52,7 @@ export default function Classes() {
         }
         const user_id = JSON.parse(user).user_id;
         const url = `${import.meta.env.VITE_CANISTER_URL}/app/${user_id}/classes`;
-        console.log("Fetching classes from:", url);
+        // console.log("Fetching classes from:", url);
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -63,7 +63,7 @@ export default function Classes() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log("Fetched Data:", data);
+        // console.log("Fetched Data:", data);
         setClasses(data.payload);
 
       } catch (error) {
@@ -75,8 +75,27 @@ export default function Classes() {
     fetchClasses();
   }, [user?.user_id, setClasses]);
 
-  const handleDelete = (id: number) => {
-    // setClasses((prevClasses) => prevClasses.filter((c) => c.id !== id));
+  const handleDelete = async (id: number) => {
+    const url = `${import.meta.env.VITE_CANISTER_URL}/app/delete_class/${id}`;
+    console.log("Deleting class:", url);
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+  
+      console.log("Deleted Data:", data);
+      setClasses([...classes.filter((c) => c.class_id !== id)]);
+    } catch (error) {
+      console.error("Error deleting class:", error);
+    }
   };
 
   const handleLike = (id: number) => {
@@ -149,7 +168,7 @@ export default function Classes() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DialogEditDeck
+                        {/* <DialogEditDeck
                           name={classItem.class_name}
                           description={classItem.class_description}
                         >
@@ -159,7 +178,7 @@ export default function Classes() {
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                           </DropdownMenuItem>
-                        </DialogEditDeck>
+                        </DialogEditDeck> */}
                         <DialogDeleteDeck
                           handleDelete={() => handleDelete(classItem.class_id)}
                         >
