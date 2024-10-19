@@ -13,6 +13,9 @@ export class Class extends BaseEntity {
   @Column({ type: "text", nullable: true })
   class_description: string;
 
+  @Column({ type: "integer", default: 0 })
+  deckCount: number;
+
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   class_createdAt: Date;
 

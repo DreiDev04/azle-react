@@ -20,7 +20,16 @@ export default class DeckController {
             const classes = await Class.findBy(class_ids || []);
             if (class_ids && classes.length !== class_ids.length) {
                 throw new Error("One or more classes not found");
-            } 
+            }
+            if (class_ids.length > 0) {
+                for (const class_id of class_ids) {
+                    const classEntity = await Class.findOneBy({ class_id });
+                    if (classEntity){
+                        classEntity.deckCount += 1;
+                        await classEntity.save();
+                    }   
+                }
+            }
 
             const deck = new Deck();
             deck.deck_name = deck_name;
@@ -50,7 +59,7 @@ export default class DeckController {
         const deck_id = parseInt(req.params.id);
 
         try {
-            const deck = await Deck.findOne({ where: { deck_id: deck_id }});
+            const deck = await Deck.findOneBy({ deck_id});
             if (deck) {
                 return res.status(200).json(deck);
             } else {
@@ -102,14 +111,30 @@ export default class DeckController {
         const deck_id = parseInt(req.params.id);
 
         try {
-            const result = await Deck.delete(deck_id);
-            if (result.affected === 1) {
-                return res.status(200).json({ message: "Deck deleted successfully" });
-            } else {
-                return res.status(404).json({ message: "Deck not found" });
+            // Find the deck with its associated classEntities
+            const deck = await Deck.findOne({ where: { deck_id }, relations: ['classEntities'] });
+            console.log(deck);
+            
+            if (!deck) {
+                throw new Error("Deck not found");
             }
+    
+            // Remove the deck from each associated class
+            const classEntities = deck.classEntities;
+            for (const classEntity of classEntities) {
+                // Decrease the deck count
+                if (classEntity.deckCount > 0) {
+                    classEntity.deckCount -= 1;
+                    await classEntity.save();
+                }
+            }
+    
+            // Delete the deck now that it's removed from associated classes
+            await Deck.delete(deck_id);
+    
+            return res.status(200).json({ message: "Deck deleted successfully" });
         } catch (error) {
-            return res.status(500).json({ message: "Error deleting deck", error });
+            return res.status(400).json({ message: "Error deleting deck", error });
         }
     };
 

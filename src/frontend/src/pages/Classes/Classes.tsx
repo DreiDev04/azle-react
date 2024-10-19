@@ -64,7 +64,7 @@ const sampleClasses: Classes[] = [
 ];
 
 export default function Classes() {
-  const [classes, setClasses] = useState<ClassData[]>([]);
+  const [classes, setClasses] = useState<Classes[]>([]);
   const [isGridLayout, setIsGridLayout] = useState(false);
 
   useEffect(() => {

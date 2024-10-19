@@ -1,6 +1,14 @@
 import { generatePasswordHash, verifyPassword } from "App/utils/helpers";
 import { User } from "Database/entities/user";
-import { Response, Request } from "express";
+import { Response, Request, response } from "express";
+import session from "express-session";
+
+declare module 'express-session' {
+  interface Session {
+    user: User,
+    visited: boolean
+  }
+}
 
 export default class UserController {
   static async users(request: Request, response: Response) {
@@ -147,14 +155,60 @@ export default class UserController {
           message: "Invalid password!",
         });
       }
+      // response.cookie('connect.sid', request.sessionID, { httpOnly: true, secure: false });
+      // request.session.user = user;
+      // request.session.visited = true;
+      // console.log(`Session: ${request.session}`);
+      // console.log(`Session ID: ${request.sessionID}`);
+      // console.log(`Session Store: ${request.sessionStore}`);
 
-      return response.status(200).json({
+      // request.session.save(err => {
+      //     if (err) {
+      //         return response.status(500).json({ message: 'Failed to save session' });
+      //     }
+      //     response.json({ message: 'Profile updated successfully' });
+      // });
+
+      return response.status(200).send({
         status: 200,
         message: "Login successful!",
+        user: user
       });
       
     } catch (error) {
-      return response.status(400).json({ message: "Error in login", error: error });
+      return response.status(400).send({ message: "Error in login", error: error });
     }
   }
+
+  static async status(req: Request, res: Response) {
+    // console.log(`Session: ${req.session}`);
+    // console.log(`Session ID: ${req.sessionID}`);
+    return response.status(200).send({session: req.session, sessionID: req.sessionID});
+  }
+
+  static async logout(req: Request, res: Response) {
+    // Destroy the session
+    console.log(req.session);
+
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+  
+      // Successfully logged out
+      res.json({ status: 200, message: 'Logged out successfully' });
+    });
+  };
+
+  static async profile(req: Request, res: Response){
+    // Check if user is authenticated
+    console.log(req.session);
+    
+    if (!(req.session.user)) {
+      return res.status(200).json({ message: 'Not authenticated', isAuthenticated: false });
+    }
+  
+    // Send user data back to the client
+    res.status(200).json({ user: req.session.user, isAuthenticated: true });
+  };
 }

@@ -29,11 +29,11 @@ export const verifyPassword = (password: string, hash: string, salt: string): bo
     return hashedPassword === hash;  // Compare hashed passwords
 };
 
-// Usage example
-export const { salt, hash } = generatePasswordHash('mysecretpassword');
-console.log('Salt:', salt);
-console.log('Hash:', hash);
+// // Usage example
+// export const { salt, hash } = generatePasswordHash('mysecretpassword');
+// console.log('Salt:', salt);
+// console.log('Hash:', hash);
 
-// Verify the password
-const isValid = verifyPassword('mysecretpassword', hash, salt);
-console.log('Password valid:', isValid);
+// // Verify the password
+// const isValid = verifyPassword('mysecretpassword', hash, salt);
+// console.log('Password valid:', isValid);
