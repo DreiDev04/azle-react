@@ -45,6 +45,8 @@ Route.get('/app/get_deck/:id', DeckController.get_deck);
 Route.post('/app/create_deck', DeckController.create_deck);
 Route.post('/app/update_deck/:id', DeckController.update_deck);
 Route.post('/app/delete_deck/:id', DeckController.delete_deck);
+Route.post('/app/add_deckToClass/:deck_id/:class_id', DeckController.add_deckToClass);
+Route.post('/app/remove_deckFromClass/:deck_id/:class_id', DeckController.remove_deckFromClass);
 
 /* Class */
 Route.get('/app/:user_id/classes', ClassController.classes);
