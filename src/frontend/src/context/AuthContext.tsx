@@ -3,7 +3,7 @@ import { TUser } from "@/types/types";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-  user: TUser;
+  user: TUser | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -12,32 +12,15 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any>(null); // Set the user state
+  const [user, setUser] = useState<TUser | null>(null); // Set the user state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // const checkSession = async () => {
-  //   const response = await fetch(`${import.meta.env.VITE_CANISTER_URL}/app/profile`, {
-  //     method: 'GET',
-  //     credentials: 'include', // Important! This sends the session cookie with the request
-  //   });
-
-  //   const data = await response.json();
-  //   if (data.isAuthenticated) {
-  //     const data = await response.json();
-  //     console.log(data.user);
-  //     setUser(data.user);
-  //     setIsAuthenticated(true);
-  //   } else {
-  //     setUser(null);
-  //     setIsAuthenticated(false);
-  //   }
-  // };
 
   const doubleCheckUserInDatabase = async (user_id: number) => {
     const response = await fetch(`${import.meta.env.VITE_CANISTER_URL}/app/get_user/${user_id}`, {
       method: 'GET',
     });
-  
+
     if (response.ok) {
       const user = (await response.json()).data;
       return user ? user : null;
@@ -45,16 +28,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return null;
     }
   };
-  
+
   useEffect(() => {
     const checkUser = async () => {
       const storedUser = localStorage.getItem('user');
-      
+
       if (storedUser) {
         const userFromDatabase = await doubleCheckUserInDatabase(JSON.parse(storedUser).user_id); // Await the async function
-        
+
         // console.log(userFromDatabase);
-  
+
         if (userFromDatabase === null) {
           // If the user exists in the database, log out
           logout();
@@ -67,7 +50,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout(); // Logout if no user is stored locally
       }
     };
-  
+
     checkUser(); // Call the async function inside useEffect
   }, []);
 
@@ -105,7 +88,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // });
     localStorage.removeItem('user');
     //console.log("Logout successful!");
-    
+
     setUser(null);
     setIsAuthenticated(false);
   };

@@ -22,27 +22,37 @@ import {
   LayoutGrid,
   LayoutList,
   ChevronRight,
+  Plus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import DialogEditDeck from "./_components/DialogEditDeck";
 import DialogDeleteDeck from "./_components/DialogDeleteDeck";
 import { TClass } from "@/types/types";
 import { useAuth } from "@/context/AuthContext";
+import DialogCreate from "./_components/DialogCreate";
+import useStore from '@/store/useStore';
+
 
 
 export default function Classes() {
-  const [classes, setClasses] = useState<TClass[]>([]); // Use sample data initially
+  // const [classes, setClasses] = useState<TClass[]>([]); // Use sample data initially
   const [isGridLayout, setIsGridLayout] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { user } = useAuth();
+  const { classes, setClasses } = useStore();
 
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const user_id = user.user_id;
+        const user = localStorage.getItem("user");
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        const user_id = JSON.parse(user).user_id;
         const url = `${import.meta.env.VITE_CANISTER_URL}/app/${user_id}/classes`;
+        console.log("Fetching classes from:", url);
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -53,7 +63,7 @@ export default function Classes() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log("Fetched Data:", data); 
+        console.log("Fetched Data:", data);
         setClasses(data.payload);
 
       } catch (error) {
@@ -63,7 +73,7 @@ export default function Classes() {
     };
 
     fetchClasses();
-  }, []);
+  }, [user?.user_id, setClasses]);
 
   const handleDelete = (id: number) => {
     // setClasses((prevClasses) => prevClasses.filter((c) => c.id !== id));
@@ -84,6 +94,7 @@ export default function Classes() {
     // );
   };
 
+
   const formatDate = (dateString: Date) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -97,17 +108,20 @@ export default function Classes() {
     <div className="container-page">
       <div className="flex items-center sticky top-0 bg-background z-10 py-2">
         <h1 className="text-2xl font-bold py-6 px-4">Your Classes </h1>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setIsGridLayout((prev) => !prev)}
-        >
-          {isGridLayout ? (
-            <LayoutList className="h-4 w-4" />
-          ) : (
-            <LayoutGrid className="h-4 w-4" />
-          )}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setIsGridLayout((prev) => !prev)}
+          >
+            {isGridLayout ? (
+              <LayoutList className="h-4 w-4" />
+            ) : (
+              <LayoutGrid className="h-4 w-4" />
+            )}
+          </Button>
+          <DialogCreate />
+        </div>
       </div>
       {error && <div className="text-destrcutive">{error}</div>}
       <div

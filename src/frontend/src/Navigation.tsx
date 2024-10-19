@@ -90,7 +90,8 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
           <div>
             <SidebarLink
               link={{
-                label: user.user_username,
+                label:  user?.user_username ?? "Guest",
+                // label: "username",
                 href: "/profile",
                 icon: (
                   <img

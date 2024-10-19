@@ -2,6 +2,12 @@ import { Class } from "Database/entities/class";
 import { User } from "Database/entities/user";
 import { Response, Request } from "express";
 import { In } from "typeorm";
+import { v4 as uuidv4 } from 'uuid';
+
+
+const UUID = () => {
+  return uuidv4();
+};
 
 export default class ClassController {
   static async classes(request: Request, response: Response) {

@@ -15,7 +15,8 @@
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.37.4",
         "sql.js": "^1.10.3",
-        "typeorm": "^0.3.20"
+        "typeorm": "^0.3.20",
+        "uuid": "^10.0.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",
