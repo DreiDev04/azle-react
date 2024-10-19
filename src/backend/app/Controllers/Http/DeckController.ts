@@ -25,7 +25,7 @@ export default class DeckController {
                 for (const class_id of class_ids) {
                     const classEntity = await Class.findOneBy({ class_id });
                     if (classEntity){
-                        classEntity.deckCount += 1;
+                        classEntity.class_deckCount += 1;
                         await classEntity.save();
                     }   
                 }
@@ -123,8 +123,8 @@ export default class DeckController {
             const classEntities = deck.classEntities;
             for (const classEntity of classEntities) {
                 // Decrease the deck count
-                if (classEntity.deckCount > 0) {
-                    classEntity.deckCount -= 1;
+                if (classEntity.class_deckCount > 0) {
+                    classEntity.class_deckCount -= 1;
                     await classEntity.save();
                 }
             }
