@@ -11,6 +11,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ToggleSwitch from "./components/ui/ToggleSwitch";
+import { useAuth } from "./context/AuthContext";
+
+async function handleLogout() {
+  await useAuth().logout();  
+}
 
 export function Navigation({ children }: { children?: React.ReactNode }) {
   const links = [
@@ -46,6 +51,7 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
 
     {
       label: "Logout",
+      onclick: {handleLogout},
       href: "/login",
       icon: (
         <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
@@ -54,6 +60,9 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
   ];
 
   const [open, setOpen] = useState(false);
+  const {user} = useAuth();
+  console.log(user);
+  
 
   return (
     <div
@@ -83,7 +92,7 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
           <div>
             <SidebarLink
               link={{
-                label: "FirstName LastName",
+                label: user.user_username,
                 href: "/profile",
                 icon: (
                   <img

@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 const formSchema = z.object({
@@ -54,9 +54,16 @@ function Signup() {
     });
 
     const data = await response.json();
-    // TODO: put the signup auth
-    console.log("Data:", data);
-    console.log("Values:", values);
+    try {
+      if (data.status === 200) {
+        console.log("Signup successful!");
+        window.location.href = "/login";
+      } else {
+        throw new Error(data.message || "Signup failed");
+      }
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    }
   }
 
   return (
