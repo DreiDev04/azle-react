@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,8 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, BookOpen, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-// Mock data for the decks
+interface DeckItem {
+  deck_id: number;
+  deck_name: string;
+  deck_description: string;
+  deck_createdAt: string;
+  // user: User;
+}
+
 const decks = [
   {
     id: 1,
@@ -54,6 +62,46 @@ const decks = [
 
 export default function FlashcardDecks() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [deck, setDeck] = useState();
+
+  useEffect(() => {
+    //   const fetchClasses = async () => {
+    //     try {
+    //       const { id } = useParams();
+    //       const url = `${import.meta.env.VITE_CANISTER_URL}/app/classes${id}`;
+    //       const response = await fetch(url, {
+    //         method: "GET",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       });
+    //       if (!response.ok) {
+    //         throw new Error("Network response was not ok");
+    //       }
+    //       const data = await response.json();
+    //       console.log("Fetched Data:", data); // Debug: Log fetched data
+    //       if (data && data.payload) {
+    //         const mappedClasses = data.payload.map((item: any) => ({
+    //           id: item.class_id,
+    //           name: item.class_name,
+    //           description: item.class_description,
+    //           createdAt: item.class_createdAt,
+    //           deckCount: item.deck_count, // Set default or fetch this if available
+    //           likes: 0, // Set default or fetch this if available
+    //           isLiked: false, // Set default or fetch this if available
+    //         }));
+    //         setClasses(mappedClasses);
+    //       } else {
+    //         throw new Error("Data format unexpected");
+    //       }
+    //     } catch (error) {
+    //       console.error("Failed to fetch classes:", error);
+    //       setError("Failed to fetch classes. Please try again later.");
+    //       setClasses(sampleClasses); // Fall back to sample data
+    //     }
+    //   };
+    //   fetchClasses();
+  }, []);
 
   const filteredDecks = decks.filter((deck) =>
     deck.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -81,16 +129,10 @@ export default function FlashcardDecks() {
       ) : (
         <div className="grid grid-cols-1 mt-6 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredDecks.map((deck) => (
-            <Card
-              key={deck.id}
-              className="flex flex-col"
-            >
+            <Card key={deck.id} className="flex flex-col">
               <CardHeader className="flex">
                 <CardTitle>{deck.title}</CardTitle>
-                <Badge
-                  className="px-2 py-1"
-                  variant="secondary"
-                >
+                <Badge className="px-2 py-1" variant="secondary">
                   {deck.cardCount} cards
                 </Badge>
               </CardHeader>
@@ -99,19 +141,13 @@ export default function FlashcardDecks() {
               </CardContent>
               <CardFooter className="flex justify-between mt-auto">
                 <Link to={`edit`}>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                  >
+                  <Button variant="outline" size="sm">
                     <Edit className="w-4 h-4 mr-2" />
                     Edit
                   </Button>
                 </Link>
                 <Link to="/flashcards">
-                  <Button
-                    className="font-bold"
-                    size="sm"
-                  >
+                  <Button className="font-bold" size="sm">
                     <BookOpen className=" w-4 h-4 mr-2" />
                     Study
                   </Button>

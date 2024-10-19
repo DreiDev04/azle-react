@@ -14,29 +14,16 @@ import { Navigation } from "./Navigation";
 import Flashcard from "./pages/Flashcard/Flashcards";
 import Profile from "./pages/Profile/Profile";
 import Classes from "./pages/Classes/Classes";
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthProvider } from "@/context/AuthContext";
 import EditDeck from "./pages/EditDeck/EditDeck";
-
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route
-        path="/"
-        element={<Root />}
-      >
-        <Route
-          index
-          element={<FrontPage />}
-        />
-        <Route
-          path="login"
-          element={<Login />}
-        />
-        <Route
-          path="signup"
-          element={<Signup />}
-        />
+      <Route path="/" element={<Root />}>
+        <Route index element={<FrontPage />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
         <Route
           path="class"
           element={
@@ -54,7 +41,7 @@ function App() {
           }
         />
         <Route
-          path="deck"
+          path="deck/:id"
           element={
             <Navigation>
               <Deck />
@@ -90,7 +77,11 @@ function App() {
     )
   );
 
-  return <AuthProvider><RouterProvider router={router} /></AuthProvider>;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

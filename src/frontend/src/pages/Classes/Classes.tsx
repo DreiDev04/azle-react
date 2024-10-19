@@ -227,8 +227,13 @@ export default function Classes() {
                   {classItem.likes}
                 </Button>
                 <Button variant="ghost" size="sm" className="ml-auto">
-                  <Link to="/deck">See Decks</Link>
-                  <ChevronRight className="ml-1 h-4 w-4" />
+                  <Link
+                    to={`/deck/${classItem.id}`}
+                    className="flex items-center"
+                  >
+                    See Decks
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </Link>
                 </Button>
               </CardFooter>
             </Card>
