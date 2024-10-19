@@ -31,6 +31,8 @@ import { toast } from "@/hooks/use-toast";
 import { PlusCircle, Save, Trash2 } from "lucide-react";
 
 const flashcardSchema = z.object({
+  deck_name: z.string().min(1, "Deck name is required"),
+  deck_description: z.string().min(1, "Deck description is required"),
   question: z.string().min(1, "Question is required"),
   answer: z.string().min(1, "Answer is required"),
   hint: z.string().optional(),
@@ -40,6 +42,9 @@ const formSchema = z.object({
   flashcards: z
     .array(flashcardSchema)
     .min(1, "At least one flashcard is required"),
+  deckName: z.string().min(1, "Deck name is required"),
+  deckDescription: z.string().min(1, "Deck description is required"),
+
 });
 
 type FlashcardType = z.infer<typeof flashcardSchema> & { date: string };
@@ -69,6 +74,8 @@ export default function Create() {
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const { deckName, deckDescription } = values;
+
     const currentDate = formatDate(new Date());
     const newFlashcards = values.flashcards.map((flashcard) => ({
       ...flashcard,
@@ -109,7 +116,7 @@ export default function Create() {
       <ResizablePanel>
         <Card>
           <CardHeader>
-            <CardTitle>Create Tokki Cards</CardTitle>
+            <CardTitle>Create Tokki Deck</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -117,6 +124,34 @@ export default function Create() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
+                <FormField
+                  control={form.control}
+                  name="deckName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Deck Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter the deck name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="deckDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Deck Description</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Enter the deck description" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+
                 {fields.map((field, index) => (
                   <Card
                     key={field.id}
@@ -208,7 +243,7 @@ export default function Create() {
           <Button
             type="button"
             size="sm"
-            onClick={() => append({ question: "", answer: "", hint: "" })}
+            onClick={() => append({ deck_name: "", deck_description: "", question: "", answer: "", hint: "" })}
           >
             <PlusCircle className="w-4 h-4 mr-2" />
             Add Flashcard
