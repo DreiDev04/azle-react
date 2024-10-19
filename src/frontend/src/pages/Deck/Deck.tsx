@@ -12,99 +12,156 @@ import { Badge } from "@/components/ui/badge";
 import { Search, BookOpen, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { TDeck } from "@/types/types";
 
-interface DeckItem {
-  deck_id: number;
-  deck_name: string;
-  deck_description: string;
-  deck_createdAt: string;
-  // user: User;
-}
-
-const decks = [
+const sampleDecks: TDeck[] = [
   {
     id: 1,
-    title: "JavaScript Basics",
-    cardCount: 30,
+    name: "JavaScript Basics",
     description: "Fundamental concepts of JavaScript",
+    createdAt: "test",
+    cardCount: 30,
+    userOwner: {
+      id: 1,
+      username: "test",
+      email: "test@test.com",
+      password: "test",
+      salt: "test",
+      createdAt: "test"
+    }
   },
   {
     id: 2,
-    title: "React Hooks",
-    cardCount: 25,
+    name: "React Hooks",
     description: "Understanding and using React Hooks",
+    createdAt: "test",
+    cardCount: 30,
+    userOwner: {
+      id: 1,
+      username: "test",
+      email: "test@test.com",
+      password: "test",
+      salt: "test",
+      createdAt: "test"
+    }
   },
   {
     id: 3,
-    title: "CSS Flexbox",
+    name: "CSS Flexbox",
     cardCount: 20,
     description: "Mastering CSS Flexbox layout",
+    createdAt: "test",
+    userOwner: {
+      id: 1,
+      username: "test",
+      email: "test@test.com",
+      password: "test",
+      salt: "test",
+      createdAt: "test"
+    }
   },
   {
     id: 4,
-    title: "Python Data Structures",
+    name: "Python Data Structures",
     cardCount: 35,
     description: "Common data structures in Python",
+    createdAt: "test",
+    userOwner: {
+      id: 1,
+      username: "test",
+      email: "test@test.com",
+      password: "test",
+      salt: "test",
+      createdAt: "test"
+    }
   },
   {
     id: 5,
-    title: "SQL Queries",
+    name: "SQL Queries",
     cardCount: 40,
     description: "Essential SQL queries for database management",
+    createdAt: "test",
+    userOwner: {
+      id: 1,
+      username: "test",
+      email: "test@test.com",
+      password: "test",
+      salt: "test",
+      createdAt: "test"
+    }
   },
   {
     id: 6,
-    title: "Git Commands",
+    name: "Git Commands",
     cardCount: 15,
     description: "Frequently used Git commands",
+    createdAt: "test",
+    userOwner: {
+      id: 1,
+      username: "test",
+      email: "test@test.com",
+      password: "test",
+      salt: "test",
+      createdAt: "test"
+    }
   },
 ];
 
 export default function FlashcardDecks() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [deck, setDeck] = useState();
+  const [decks, setDecks] = useState<TDeck[]>(sampleDecks);
+  const [error, setError] = useState<string | null>(null);
+
+  const { id } = useParams();
 
   useEffect(() => {
-    //   const fetchClasses = async () => {
-    //     try {
-    //       const { id } = useParams();
-    //       const url = `${import.meta.env.VITE_CANISTER_URL}/app/classes${id}`;
-    //       const response = await fetch(url, {
-    //         method: "GET",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       });
-    //       if (!response.ok) {
-    //         throw new Error("Network response was not ok");
-    //       }
-    //       const data = await response.json();
-    //       console.log("Fetched Data:", data); // Debug: Log fetched data
-    //       if (data && data.payload) {
-    //         const mappedClasses = data.payload.map((item: any) => ({
-    //           id: item.class_id,
-    //           name: item.class_name,
-    //           description: item.class_description,
-    //           createdAt: item.class_createdAt,
-    //           deckCount: item.deck_count, // Set default or fetch this if available
-    //           likes: 0, // Set default or fetch this if available
-    //           isLiked: false, // Set default or fetch this if available
-    //         }));
-    //         setClasses(mappedClasses);
-    //       } else {
-    //         throw new Error("Data format unexpected");
-    //       }
-    //     } catch (error) {
-    //       console.error("Failed to fetch classes:", error);
-    //       setError("Failed to fetch classes. Please try again later.");
-    //       setClasses(sampleClasses); // Fall back to sample data
-    //     }
-    //   };
-    //   fetchClasses();
+      const fetchDecks = async () => {
+        try {
+          console.log(id);
+          const url = `${import.meta.env.VITE_CANISTER_URL}/app/class_decks/${id}`;
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            console.log("Network response was not ok");
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("Fetched Decks:", data); // Debug: Log fetched data
+          if (data && data.payload) {
+            const mappedDecks = data.payload.map((item: any) => ({
+              id: item.deck_id,
+              name: item.deck_name,
+              description: item.deck_description,
+              createdAt: item.deck_createdAt,
+              cardCount: item.deck_cardCount,
+              userOwner: {
+                id: item.deck_userOwner.user_id,
+                username: item.deck_userOwner.user_username,
+                email: item.deck_userOwner.user_email,
+                password: item.deck_userOwner.user_password,
+                salt: item.deck_userOwner.user_salt,
+                createdAt: item.deck_userOwner.user_createdAt
+              }
+            }));
+            setDecks(mappedDecks);
+          } else {
+            throw new Error("Data format unexpected");
+          }
+        } catch (error) {
+          console.error("Failed to fetch decks:", error);
+          setError("Failed to fetch decks. Please try again later.");
+          setDecks(sampleDecks); // Fall back to sample data
+        }
+      };
+      fetchDecks();
   }, []);
 
   const filteredDecks = decks.filter((deck) =>
-    deck.title.toLowerCase().includes(searchTerm.toLowerCase())
+    deck.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -131,7 +188,7 @@ export default function FlashcardDecks() {
           {filteredDecks.map((deck) => (
             <Card key={deck.id} className="flex flex-col">
               <CardHeader className="flex">
-                <CardTitle>{deck.title}</CardTitle>
+                <CardTitle>{deck.name}</CardTitle>
                 <Badge className="px-2 py-1" variant="secondary">
                   {deck.cardCount} cards
                 </Badge>

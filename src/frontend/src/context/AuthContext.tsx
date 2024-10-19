@@ -40,20 +40,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   //   }
   // };
 
-  useEffect(() => {
-    // localStorage.removeItem('user');
-    // console.log("Logout successful!");
-    
-    // setUser(null);
-    // setIsAuthenticated(false);
-
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
+  const doubleCheckUserInDatabase = async (user_id: number) => {
+    const response = await fetch(`${import.meta.env.VITE_CANISTER_URL}/app/get_user/${user_id}`, {
+      method: 'GET',
+    });
+  
+    if (response.ok) {
+      const user = (await response.json()).data;
+      return user ? user : null;
+    } else {
+      return null;
     }
-
-    // checkSession();
+  };
+  
+  useEffect(() => {
+    const checkUser = async () => {
+      const storedUser = localStorage.getItem('user');
+      
+      if (storedUser) {
+        const userFromDatabase = await doubleCheckUserInDatabase(JSON.parse(storedUser).user_id); // Await the async function
+        
+        console.log(userFromDatabase);
+  
+        if (userFromDatabase === null) {
+          // If the user exists in the database, log out
+          logout();
+        } else {
+          // If the user does not exist, set the user and authentication state
+          setUser(userFromDatabase);
+          setIsAuthenticated(true);
+        }
+      } else {
+        logout(); // Logout if no user is stored locally
+      }
+    };
+  
+    checkUser(); // Call the async function inside useEffect
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -84,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     //   credentials: 'include', // Send session cookie with the request to destroy the session
     // });
     localStorage.removeItem('user');
-    console.log("Logout successful!");
+    //console.log("Logout successful!");
     
     setUser(null);
     setIsAuthenticated(false);

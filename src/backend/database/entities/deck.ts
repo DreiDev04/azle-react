@@ -17,13 +17,16 @@ export class Deck extends BaseEntity {
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   deck_createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.decks, { eager: true })
-  user: User;
+  @Column({ type: "integer", default: 0 })
+  deck_cardCount: number;
 
-  @ManyToMany(() => Class, (classEntities) => classEntities.class_decks)
+  @ManyToOne(() => User, (user) => user.decks, { eager: true })
+  deck_userOwner: User;
+
+  @ManyToMany(() => Class, (deck_classEntities) => deck_classEntities.class_decks)
   @JoinTable() 
-  classEntities: Class[];
+  deck_classEntities: Class[];
 
   @OneToMany(() => Card, (card) => card.deck)
-  cards: Card[];
+  deck_cards: Card[];
 }
