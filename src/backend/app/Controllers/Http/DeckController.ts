@@ -189,7 +189,6 @@ export default class DeckController {
             if (!classEntity) {
                 throw new Error("Class not found");
             }
-            console.log("1");
             if (!deck.deck_classEntities) {
                 deck.deck_classEntities = [];
             }
@@ -199,9 +198,7 @@ export default class DeckController {
             }
             //TODO: check if deck is already in class
             deck.deck_classEntities.push(classEntity);
-            console.log("2");
             await deck.save();
-            console.log("3");
             return res.status(200).json({ message: "Success in adding deck to class" });
         } catch (error) {
             return res.status(400).json({ message: "Error adding deck to class", error })
@@ -213,7 +210,10 @@ export default class DeckController {
         const class_id = parseInt(req.params.class_id);
 
         try {
-            const deck = await Deck.findOneBy({ deck_id });
+            const deck = await Deck.findOne({
+                where: { deck_id },
+                relations: ["deck_classEntities"]
+            });
             if (!deck) {
                 throw new Error("Deck not found");
             }
@@ -221,14 +221,17 @@ export default class DeckController {
             if (!classEntity) {
                 throw new Error("Class not found");
             }
+            console.log("1");
             if (classEntity){
                 classEntity.class_deckCount -= 1;
                 await classEntity.save();
             }
+            console.log("2");
             // if (!deck.deck_classEntities) {
             //     deck.deck_classEntities = [];
             // }
             deck.deck_classEntities = deck.deck_classEntities.filter((classEntity) => classEntity.class_id !== class_id);
+            console.log("3");
             await deck.save();
             return res.status(200).json({ message: "Success in removing deck from class" });
         } catch (error) {
