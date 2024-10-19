@@ -110,32 +110,33 @@ export default class DeckController {
     // Delete Deck
     static delete_deck = async (req: Request, res: Response) => {
         const deck_id = parseInt(req.params.id);
-
+      
         try {
-            // Find the deck with its associated classEntities
-            const deck = await Deck.findOne({ where: { deck_id }, relations: ['classEntities'] });
-            console.log(deck);
-            
-            if (!deck) {
-                throw new Error("Deck not found");
+          // Find the deck with its associated classEntities
+          const deck = await Deck.findOne({ where: { deck_id }, relations: ['deck_classEntities'] });
+          //console.log(deck);
+      
+          if (!deck) {
+            throw new Error("Deck not found");
+          }
+      
+          // Remove the deck from each associated class
+          const classEntities = deck.deck_classEntities;
+          for (const classEntity of classEntities) {
+            // Decrease the deck count
+            if (classEntity.class_deckCount > 0) {
+              classEntity.class_deckCount -= 1;
+              await classEntity.save(); // Save the changes to the database
             }
-    
-            // Remove the deck from each associated class
-            const classEntities = deck.deck_classEntities;
-            for (const classEntity of classEntities) {
-                // Decrease the deck count
-                if (classEntity.class_deckCount > 0) {
-                    classEntity.class_deckCount -= 1;
-                    await classEntity.save();
-                }
-            }
-    
-            // Delete the deck now that it's removed from associated classes
-            await Deck.delete(deck_id);
-    
-            return res.status(200).json({ message: "Deck deleted successfully" });
+          }
+      
+          // Delete the deck now that it's removed from associated classes
+          await deck.remove();
+      
+          return res.status(200).json({ message: "Deck deleted successfully" });
         } catch (error) {
-            return res.status(400).json({ message: "Error deleting deck", error });
+          console.error(error); // Log the error
+          return res.status(400).json({ message: "Error deleting deck", error });
         }
     };
 
