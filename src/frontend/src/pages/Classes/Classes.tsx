@@ -64,26 +64,54 @@ const sampleClasses: Classes[] = [
 ];
 
 export default function Classes() {
-  const [classes, setClasses] = useState<Classes[]>(sampleClasses);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [isGridLayout, setIsGridLayout] = useState(false);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        // TODO: Replace '1' with the actual user ID
+        const userId = '1';
+        const urlWithParams = `${import.meta.env.VITE_CANISTER_URL}/app/${userId}/classes`;
+        const response = await fetch(urlWithParams, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setClasses(data.payload);
+        console.log('Data:', data);
+      } catch (error) {
+        console.error('Failed to fetch classes:', error);
+      }
+    };
+    fetchClasses();
+    console.log('Classes:', classes);
+  }, []);
 
   const handleDelete = (id: number) => {
     setClasses(classes.filter((c) => c.id !== id));
   };
 
   const handleLike = (id: number) => {
-    setClasses(
-      classes.map((c) => {
-        if (c.id === id) {
-          return {
-            ...c,
-            likes: c.isLiked ? c.likes - 1 : c.likes + 1,
-            isLiked: !c.isLiked,
-          };
-        }
-        return c;
-      })
-    );
+    // TODO: Implement like class with backend
+    // setClasses(
+    //   classes.map((c) => {
+    //     if (c.id === id) {
+    //       return {
+    //         ...c,
+    //         likes: c.isLiked ? c.likes - 1 : c.likes + 1,
+    //         isLiked: !c.isLiked,
+    //       };
+    //     }
+    //     return c;
+    //   })
+    // );
   };
 
   // TODO: should be moved to a utility file

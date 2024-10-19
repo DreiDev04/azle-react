@@ -25,7 +25,10 @@ Route.get('/app/get_user', UserController.get_user);
 Route.post('/app/create_user', UserController.create_user);
 Route.post('/app/update_user', UserController.update_user);
 Route.post('/app/delete_user', UserController.delete_user);
-Route.post('/app/login', UserController.login)
+Route.post('/app/login', UserController.login);
+Route.post('/app/logout', UserController.logout);
+Route.get('/app/profile', UserController.profile);
+Route.get('/app/status', UserController.status);
 
 /* Card */
 Route.get('/app/:deck_id/cards', CardController.cards);
