@@ -6,6 +6,8 @@ type Store = {
   setClasses: (classes: TClass[]) => void;
   decks: TDeck[];
   setDecks: (deck: TDeck[]) => void;
+  userDeck: TDeck[];
+  setUserDeck: (deck: TDeck[]) => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -13,6 +15,9 @@ const useStore = create<Store>((set) => ({
   setClasses: (classes: TClass[]) => set({ classes }),
   decks: [],
   setDecks: (decks: TDeck[]) => set({ decks }),
+  userDeck: [],
+  setUserDeck: (userDeck: TDeck[]) => set({ userDeck }),
+  
 }));
 
 export default useStore;
