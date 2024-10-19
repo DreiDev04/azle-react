@@ -33,6 +33,7 @@ Route.get('/app/status', UserController.status);
 Route.get('/app/:deck_id/cards', CardController.cards);
 Route.get('/app/get_card', CardController.get_card);
 Route.post('/app/create_card', CardController.create_card);
+Route.post('/app/:deck_id/create_cards', CardController.create_cards); //to create many cards at once, used in creating decks
 Route.post('/app/update_card', CardController.update_card);
 Route.post('/app/delete_card', CardController.delete_card);
 

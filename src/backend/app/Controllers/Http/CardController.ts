@@ -25,6 +25,33 @@ export default class CardController {
         }
     }
 
+    static async create_cards(request: Request, response: Response) {
+        const deck_id = parseInt(request.params.deck_id);
+        const { cards } = request.body;
+        try {
+            const deck = await Deck.findOneBy({deck_id});
+            if (!deck){
+                throw new Error("Deck not found!");
+            }
+            console.log("cardssssss");
+            const cardEntities = [];
+            for (const cardData of cards) {
+                const card = new Card();
+                card.card_question = cardData.card_question;
+                card.card_answer = cardData.card_answer;
+                card.card_recalledForCount = cardData.card_recalledForCount || 0;
+                card.card_hint = cardData.card_hint || '';
+                card.card_isRedo = cardData.card_isRedo || false;
+                card.deck = deck;
+                await Card.save(card);
+                cardEntities.push(card);
+            }
+            return response.status(201).json({ message: "Cards created!"});
+        } catch (error) {
+            return response.status(400).json({ message: "Error in creating card: ", error })
+        }
+    }
+
     static async create_card(request: Request, response: Response) {
         const { card_answer, card_question, card_recalledForCount, card_hint, card_isRedo, deck_id } = request.body;
         try {

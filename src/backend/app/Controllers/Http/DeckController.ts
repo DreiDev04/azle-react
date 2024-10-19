@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Deck } from 'Database/entities/deck';
 import { User } from 'Database/entities/user';
 import { Class } from 'Database/entities/class';
+import { Card } from 'Database/entities/card';
 
 export default class DeckController {
     // Create Deck
