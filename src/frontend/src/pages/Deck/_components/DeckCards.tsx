@@ -40,6 +40,7 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck_id, deck_name, deck_cardCount,
       </CardFooter>
     </Card>
   );
+  
 };
 
 export default DeckCard;

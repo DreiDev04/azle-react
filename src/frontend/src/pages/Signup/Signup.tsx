@@ -3,26 +3,20 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
 
 const formSchema = z.object({
-  username: z.string().min(2, {
+  user_username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  email: z.string().email({
+  user_email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  password: z.string().min(6, {
+  user_password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
 });
@@ -31,47 +25,29 @@ function Signup() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      password: "",
-      email: "",
+      user_username: "",
+      user_password: "",
+      user_email: "",
     },
   });
 
   const navigate = useNavigate();
+  const { signup } = useAuth(); // Use the signup function from AuthContext
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { username, email, password } = values;
-
-    const url = `${import.meta.env.VITE_CANISTER_URL}/app/create_user`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_username: username,
-        user_email: email,
-        user_password: password,
-      }),
-    });
-
-    const data = await response.json();
+    const { user_username, user_email, user_password } = values;
     try {
-      if (data.status === 200) {
-        console.log("Signup successful!");
-        navigate("/login");
-      } else {
-        throw new Error(data.message || "Signup failed");
-      }
+      await signup(user_username, user_email, user_password);
+      navigate("/"); // Redirect after successful signup
     } catch (error) {
-      console.log(`Error: ${error}`);
+      console.log("Signup failed:", error);
     }
   }
 
   return (
     <div className="bg-background flex items-center justify-center h-full w-full">
       <Button asChild className="fixed top-5 left-5">
-        <Link to="/"> 
+        <Link to="/">
           <span><ArrowLeft size={15} /> </span>
           Back
         </Link>
@@ -85,7 +61,7 @@ function Signup() {
 
           <FormField
             control={form.control}
-            name="username"
+            name="user_username"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
@@ -101,7 +77,7 @@ function Signup() {
           />
           <FormField
             control={form.control}
-            name="email"
+            name="user_email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -118,7 +94,7 @@ function Signup() {
           />
           <FormField
             control={form.control}
-            name="password"
+            name="user_password"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>

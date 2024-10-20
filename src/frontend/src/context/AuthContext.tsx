@@ -6,6 +6,7 @@ interface AuthContextType {
   user: TUser | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  signup: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -31,31 +32,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const checkUser = async () => {
-      const storedUser = localStorage.getItem('user');
-
+      const storedUser = localStorage.getItem("user");
+    
       if (storedUser) {
-        const userFromDatabase = await doubleCheckUserInDatabase(JSON.parse(storedUser).user_id); // Await the async function
-
-        // console.log(userFromDatabase);
-        console.log("User ID:",userFromDatabase.user_id);
-
-        if (userFromDatabase === null) {
-          // If the user exists in the database, log out
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          console.log("Parsed stored user:", parsedUser);
+    
+          if (!parsedUser?.user_id) {
+            console.error("No user_id found in storedUser:", parsedUser);
+            logout(); // Log out if the user_id is missing
+            return;
+          }
+    
+          const userFromDatabase = await doubleCheckUserInDatabase(parsedUser.user_id);
+          console.log("User fetched from database:", userFromDatabase);
+    
+          if (!userFromDatabase || !userFromDatabase.user_id) {
+            console.error("User not found or user_id missing, logging out.");
+            logout();
+          } else {
+            console.log("User ID from database:", userFromDatabase.user_id);
+            setUser(userFromDatabase);
+            setIsAuthenticated(true);
+          }
+        } catch (error) {
+          console.error("Error parsing or fetching user:", error);
           logout();
-        } else {
-          // If the user does not exist, set the user and authentication state
-          setUser(userFromDatabase);
-          setIsAuthenticated(true);
         }
       } else {
-        logout(); // Logout if no user is stored locally
+        logout();
       }
     };
-
-    checkUser(); // Call the async function inside useEffect
+  
+    checkUser();
   }, []);
+  
 
   const login = async (email: string, password: string) => {
+    // Log the response to ensure `user_id` is being received
     const url = `${import.meta.env.VITE_CANISTER_URL}/app/login`;
     const response = await fetch(url, {
       method: "POST",
@@ -63,24 +78,66 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ user_email: email, user_password: password }),
-      // credentials: 'include'
     });
     const data = await response.json();
-
+    console.log("Login response:", data);
+  
     if (data.status === 200) {
       const filteredUser = {
-        user_id: data.user.user_id,
+        user_id: data.user.user_id, // Ensure user_id is correctly set
         user_name: data.user.user_username,
         user_createdAt: data.user.user_createdAt,
-      }
-      localStorage.setItem('user', JSON.stringify(filteredUser));
-      setUser(data.user); // Assuming the user data comes back in the response
+      };
+      localStorage.setItem("user", JSON.stringify(filteredUser));
+      setUser(data.user);
       setIsAuthenticated(true);
       console.log("Login successful!");
     } else {
       throw new Error(data.message || "Login failed");
     }
   };
+
+  const signup = async (username: string, email: string, password: string) => {
+    const url = `${import.meta.env.VITE_CANISTER_URL}/app/create_user`;
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_username: username,
+          user_email: email,
+          user_password: password,
+        }),
+      });
+  
+      const data = await response.json();
+      console.log("Signup response:", data);
+      
+      if (response.status === 201) {
+        const newUser = {
+          user_id: data.user.user_id, // Ensure user_id is correctly set
+          user_name: data.user.user_username,
+          user_createdAt: data.user.user_createdAt,
+        };
+        console.log("New user:", newUser);
+        localStorage.setItem("user", JSON.stringify(newUser));
+        setUser(data.user);
+        setIsAuthenticated(true);
+        console.log("Signup successful!");
+      } else {
+        throw new Error(data.message || "Signup failed");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(`Error: ${error.message}`);
+      } else {
+        console.log("An unknown error occurred");
+      }
+    }
+  };
+  
 
   const logout = async () => {
     // await fetch(`${import.meta.env.VITE_CANISTER_URL}/app/logout`, {
@@ -95,7 +152,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, signup}}>
       {children}
     </AuthContext.Provider>
   );
