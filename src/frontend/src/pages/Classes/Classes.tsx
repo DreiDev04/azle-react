@@ -64,34 +64,34 @@ const sampleClasses: Classes[] = [
 ];
 
 export default function Classes() {
-  const [classes, setClasses] = useState<ClassData[]>([]);
+  const [classes, setClasses] = useState<Classes[]>([]);
   const [isGridLayout, setIsGridLayout] = useState(false);
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        // TODO: Replace '1' with the actual user ID
-        const userId = '1';
-        const urlWithParams = `${import.meta.env.VITE_CANISTER_URL}/app/${userId}/classes`;
-        const response = await fetch(urlWithParams, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setClasses(data.payload);
-        console.log('Data:', data);
-      } catch (error) {
-        console.error('Failed to fetch classes:', error);
-      }
-    };
-    fetchClasses();
-    console.log('Classes:', classes);
+    // const fetchClasses = async () => {
+    //   try {
+    //     // TODO: Replace '1' with the actual user ID
+    //     const userId = '1';
+    //     const urlWithParams = `${import.meta.env.VITE_CANISTER_URL}/app/${userId}/classes`;
+    //     const response = await fetch(urlWithParams, {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Access-Control-Allow-Origin': '*',
+    //       },
+    //     });
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     const data = await response.json();
+    //     setClasses(data.payload);
+    //     console.log('Data:', data);
+    //   } catch (error) {
+    //     console.error('Failed to fetch classes:', error);
+    //   }
+    // };
+    // fetchClasses();
+    // console.log('Classes:', classes);
   }, []);
 
   const handleDelete = (id: number) => {
@@ -143,7 +143,7 @@ export default function Classes() {
       <div
         className={`grid gap-4 ${isGridLayout ? "md:grid-cols-2" : "grid-cols-1"}`}
       >
-        {/* {classes.map((classItem) => (
+        {sampleClasses.map((classItem) => (
           <Card
             key={classItem.id}
             className="overflow-hidden border-b border-border hover:bg-accent transition-colors"
@@ -222,7 +222,7 @@ export default function Classes() {
               </CardFooter>
             </Card>
           ))
-        } */}
+        }
       </div>
     </div>
   );

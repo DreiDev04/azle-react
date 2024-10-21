@@ -92,7 +92,7 @@ const FrontPage = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gray-200 rounded-xl transform rotate-3"></div>
                 <img
-                  src="https://placehold.co/600x400"
+                  src="/frontCard.png"
                   alt="ScrollUp App"
                   className="relative rounded-xl shadow-2xl"
                 />
