@@ -32,26 +32,13 @@ const FrontPage = () => {
             </>
           ) : (
             <>
-              <Button
-                variant={"outline"}
-                asChild
-              >
-                <Link to="/signup">Sign Up</Link>
-              </Button>
-              <Button
-                variant={"default"}
-                asChild
-              >
-                <Link to="/login">Login</Link>
-              </Button>
-
               {/* Dummy for testing */}
               {/* Delete AFTER */}
               <Button
                 variant={"default"}
                 asChild
               >
-                <Link to="/class">Class</Link>
+                <Link to="/class">App</Link>
               </Button>
             </>
           )}

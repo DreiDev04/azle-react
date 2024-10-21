@@ -23,21 +23,21 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
     },
     // TODO: delete /deck and /flashcards route
     {
-      label: "Flashcards",
+      label: "Card Reels",
       href: "/flashcards",
       icon: (
         <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
-      label: "Tokki Decks",
+      label: "Decks",
       href: "/deck",
       icon: (
         <IconCards className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
-      label: "Create Tokki Deck",
+      label: "Create a Deck",
       href: "/create",
       icon: (
         <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
@@ -83,7 +83,7 @@ export function Navigation({ children }: { children?: React.ReactNode }) {
           <div>
             <SidebarLink
               link={{
-                label: "FirstName LastName",
+                label: "User",
                 href: "/profile",
                 icon: (
                   <img
@@ -117,7 +117,7 @@ export const Logo = () => {
             animate={{ opacity: 1 }}
             className="font-medium text-black dark:text-white whitespace-pre"
           >
-            Tokki
+            ScrollUp
           </motion.span>
         </Link>
       </div>
